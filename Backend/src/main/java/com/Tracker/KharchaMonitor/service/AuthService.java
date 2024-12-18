@@ -4,13 +4,11 @@ import com.Tracker.KharchaMonitor.model.User;
 import com.Tracker.KharchaMonitor.repository.UserRepository;
 import com.Tracker.KharchaMonitor.utils.DTO;
 import com.Tracker.KharchaMonitor.utils.EmailValidator;
+import com.Tracker.KharchaMonitor.utils.OtpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Random;
 
 
 @Service
@@ -25,22 +23,9 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private OtpUtils otpUtils;
 
-    // Generate 6 digit OTP
-    private String generateOtp() {
-        Random random =new Random();
-        int otp = 100000 + random.nextInt(900000);
-        return String.valueOf(otp);
-    }
-
-    //Send OTP to Email
-    public void sendOtp(String email, String otp) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("KharchaMonitor One Time Password ");
-        message.setText("Your OTP is "+otp);
-        mailSender.send(message);
-    }
 
     //Check if username Exists
     public boolean usernameExists(String username) {
@@ -67,11 +52,18 @@ public class AuthService {
             return new DTO("Email already exists.", false);
         }
 
-        user.setOtp(generateOtp());
+//        user.setOtp(generateOtp());
+//        user.setVerified(false);
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));  // Encrypt password
+//        userRepository.save(user);
+//        sendOtp((user.getEmail()), user.getOtp());
+
+        String otp = otpUtils.generateOtp();
+        user.setOtp(otp);
         user.setVerified(false);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));  // Encrypt password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        sendOtp((user.getEmail()), user.getOtp());
+        otpUtils.sendOtp(user.getEmail(),otp);
         return new DTO("User registered. Please verify with OTP sent to your registered email.", true);
     }
 
@@ -99,10 +91,10 @@ public class AuthService {
             return new DTO("Email not found",false);
         }
 
-        String resetToken = generateOtp();
+        String resetToken = otpUtils.generateOtp();
         user.setResetToken(resetToken);
         userRepository.save(user);
-        sendOtp(email, resetToken);
+        otpUtils.sendOtp(email, resetToken);
         return new DTO("Reset token sent to registered email.",true);
     }
 
