@@ -2,6 +2,7 @@ package com.Tracker.KharchaMonitor.controller;
 
 import com.Tracker.KharchaMonitor.service.UserService;
 import com.Tracker.KharchaMonitor.utils.DTO;
+import com.Tracker.KharchaMonitor.utils.UserProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,18 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+
+    // Get User Details
+    @GetMapping("/details/{username}")
+    public ResponseEntity<DTO<UserProfileDTO>> fetUserDetails(@PathVariable String username) {
+        DTO<UserProfileDTO> result = userService.getProfileDetails(username);
+        if(!result.success) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+        return ResponseEntity.ok(result);
+    }
+
 
     // Change Username
     @PutMapping("/change-username")

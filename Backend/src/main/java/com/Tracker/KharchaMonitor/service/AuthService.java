@@ -52,11 +52,6 @@ public class AuthService {
             return new DTO("Email already exists.", false);
         }
 
-//        user.setOtp(generateOtp());
-//        user.setVerified(false);
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));  // Encrypt password
-//        userRepository.save(user);
-//        sendOtp((user.getEmail()), user.getOtp());
 
         String otp = otpUtils.generateOtp();
         user.setOtp(otp);
