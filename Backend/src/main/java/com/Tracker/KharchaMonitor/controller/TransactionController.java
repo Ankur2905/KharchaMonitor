@@ -4,6 +4,7 @@ import com.Tracker.KharchaMonitor.model.Transaction;
 import com.Tracker.KharchaMonitor.service.TransactionService;
 import com.Tracker.KharchaMonitor.utils.DTO;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +16,8 @@ import java.util.List;
 @RequestMapping("/api/transactions")
 public class TransactionController {
 
-    private final TransactionService transactionService;
-
-    public TransactionController(TransactionService transactionService) {
-        this.transactionService = transactionService;
-    }
+    @Autowired
+    TransactionService transactionService;
 
 
     @PostMapping
