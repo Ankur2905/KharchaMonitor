@@ -3,8 +3,8 @@ package com.Tracker.KharchaMonitor.service;
 import com.Tracker.KharchaMonitor.model.Budget;
 import com.Tracker.KharchaMonitor.repository.BudgetRepository;
 import com.Tracker.KharchaMonitor.repository.UserRepository;
-import com.Tracker.KharchaMonitor.utils.BudgetDTO;
-import com.Tracker.KharchaMonitor.utils.DTO;
+import com.Tracker.KharchaMonitor.dto.BudgetDTO;
+import com.Tracker.KharchaMonitor.dto.DTO;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class BudgetService {
 
 
     // Create Budget
-    public DTO createBudget(Budget budget) {
+    public com.Tracker.KharchaMonitor.dto.DTO createBudget(Budget budget) {
         if (!ObjectId.isValid(String.valueOf(budget.getUserId())) || !userRepository.existsById(new ObjectId(String.valueOf(budget.getUserId())))) {
             return new DTO<>("Invalid or non- existing userId.", false);
         }
@@ -57,7 +57,7 @@ public class BudgetService {
 
 
     // Update Budget
-    public DTO updateBudget(ObjectId id, Budget updatedBudget) {
+    public com.Tracker.KharchaMonitor.dto.DTO updateBudget(ObjectId id, Budget updatedBudget) {
         Optional<Budget> optionalBudget = budgetRepository.findById(id);
         if (optionalBudget.isPresent()) {
             Budget budget = optionalBudget.get();
@@ -75,7 +75,7 @@ public class BudgetService {
 
 
     // Delete Budget
-    public DTO deleteBudget(ObjectId id) {
+    public com.Tracker.KharchaMonitor.dto.DTO deleteBudget(ObjectId id) {
         if (budgetRepository.existsById(id)) {
             budgetRepository.deleteById(id);
             return  new DTO<>("Budget deleted successfully",true);

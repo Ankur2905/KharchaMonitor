@@ -3,7 +3,7 @@ package com.Tracker.KharchaMonitor.service;
 
 import com.Tracker.KharchaMonitor.model.Transaction;
 import com.Tracker.KharchaMonitor.repository.TransactionRepository;
-import com.Tracker.KharchaMonitor.utils.DTO;
+import com.Tracker.KharchaMonitor.dto.DTO;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class TransactionService {
     @Autowired TransactionRepository transactionRepository;
 
     // Create a new Transaction
-    public DTO<Transaction> createTransaction(Transaction transaction) {
+    public com.Tracker.KharchaMonitor.dto.DTO<Transaction> createTransaction(Transaction transaction) {
         transaction.setId(new ObjectId());
         transaction.setDate(LocalDateTime.now());
         Transaction savedTransaction = transactionRepository.save(transaction);
@@ -25,7 +25,7 @@ public class TransactionService {
     }
 
     // Retrieve a transaction by ID
-    public DTO<Transaction> getTransactionById(ObjectId id) {
+    public com.Tracker.KharchaMonitor.dto.DTO<Transaction> getTransactionById(ObjectId id) {
         return transactionRepository.findById(id)
                 .map(transaction -> new DTO<>("Transaction found",true,transaction))
                 .orElse(new DTO<>("Transaction not found", false, null));
@@ -37,7 +37,7 @@ public class TransactionService {
     }
 
     // Update a transaction
-    public DTO<Transaction> updateTransaction(ObjectId id, Transaction updatedTransaction) {
+    public com.Tracker.KharchaMonitor.dto.DTO<Transaction> updateTransaction(ObjectId id, Transaction updatedTransaction) {
         if (!transactionRepository.existsById(id)) {
             return new DTO<>("Transaction not found",false,null);
         }
@@ -57,7 +57,7 @@ public class TransactionService {
     }
 
     // Delete a transaction
-    public DTO<Void> deleteTransaction(ObjectId id) {
+    public com.Tracker.KharchaMonitor.dto.DTO<Void> deleteTransaction(ObjectId id) {
         if (!transactionRepository.existsById(id)) {
             return new DTO<>("Transaction not found",false,null);
         }

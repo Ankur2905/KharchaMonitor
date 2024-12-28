@@ -2,7 +2,7 @@ package com.Tracker.KharchaMonitor.service;
 
 import com.Tracker.KharchaMonitor.model.User;
 import com.Tracker.KharchaMonitor.repository.UserRepository;
-import com.Tracker.KharchaMonitor.utils.DTO;
+import com.Tracker.KharchaMonitor.dto.DTO;
 import com.Tracker.KharchaMonitor.utils.EmailValidator;
 import com.Tracker.KharchaMonitor.utils.OtpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class AuthService {
 
 
     // Register User with OTP verification
-    public DTO register(User user) {
+    public com.Tracker.KharchaMonitor.dto.DTO register(User user) {
         if(!EmailValidator.isValidEmail(user.getEmail())) {
             return new DTO("Invalid email format.",false);
         }
@@ -63,7 +63,7 @@ public class AuthService {
     }
 
     //Verify OTP
-    public DTO verifyOtp(String email, String otp) {
+    public com.Tracker.KharchaMonitor.dto.DTO verifyOtp(String email, String otp) {
         User user = userRepository.findByEmail(email);
         if(user == null) {
             return new DTO("Email not found",false);
@@ -80,7 +80,7 @@ public class AuthService {
     }
 
     // Forgot Password (Generate Reset Token)
-    public DTO forgotPassword(String email) {
+    public com.Tracker.KharchaMonitor.dto.DTO forgotPassword(String email) {
         User user =userRepository.findByEmail(email);
         if(user == null){
             return new DTO("Email not found",false);
@@ -94,7 +94,7 @@ public class AuthService {
     }
 
     // Reset Password using reset token
-    public DTO resetPassword(String email, String resetToken, String newPassword) {
+    public com.Tracker.KharchaMonitor.dto.DTO resetPassword(String email, String resetToken, String newPassword) {
         User user = userRepository.findByResetToken(resetToken);
         if(user == null || !user.getEmail().equals(email)) {
             return new DTO("Invalid reset token",false);

@@ -1,5 +1,4 @@
-package com.Tracker.KharchaMonitor.utils;
-
+package com.Tracker.KharchaMonitor.dto;
 
 import lombok.Getter;
 import lombok.Setter;

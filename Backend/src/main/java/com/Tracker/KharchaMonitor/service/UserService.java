@@ -2,10 +2,10 @@ package com.Tracker.KharchaMonitor.service;
 
 import com.Tracker.KharchaMonitor.model.User;
 import com.Tracker.KharchaMonitor.repository.UserRepository;
-import com.Tracker.KharchaMonitor.utils.DTO;
+import com.Tracker.KharchaMonitor.dto.DTO;
 import com.Tracker.KharchaMonitor.utils.EmailValidator;
 import com.Tracker.KharchaMonitor.utils.OtpUtils;
-import com.Tracker.KharchaMonitor.utils.UserProfileDTO;
+import com.Tracker.KharchaMonitor.dto.UserProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class UserService {
     private OtpUtils otpUtils;
 
     // Fetch user profile details
-    public DTO<UserProfileDTO> getProfileDetails(String username) {
+    public com.Tracker.KharchaMonitor.dto.DTO<com.Tracker.KharchaMonitor.dto.UserProfileDTO> getProfileDetails(String username) {
         User user = userRepository.findByUsername(username);
         if(user == null) {
             return new DTO<>("User not found!",false,null);
@@ -40,7 +40,7 @@ public class UserService {
     }
 
     // Change Username
-    public DTO changeUsername(String currentUsername, String newUsername) {
+    public com.Tracker.KharchaMonitor.dto.DTO changeUsername(String currentUsername, String newUsername) {
         User user = userRepository.findByUsername(currentUsername);
         if(user == null) {
             return new DTO<>("User not found",false);
@@ -54,7 +54,7 @@ public class UserService {
     }
 
     // Change Email
-    public DTO changeEmail(String currentEmail, String newEmail) {
+    public com.Tracker.KharchaMonitor.dto.DTO changeEmail(String currentEmail, String newEmail) {
         User user = userRepository.findByEmail(currentEmail);
         if(user == null) {
             return new DTO<>("User not found",false);
@@ -78,7 +78,7 @@ public class UserService {
     }
 
     // Change Password
-    public DTO changePassword(String email, String oldPassword, String newPassword) {
+    public com.Tracker.KharchaMonitor.dto.DTO changePassword(String email, String oldPassword, String newPassword) {
         User user = userRepository.findByEmail(email);
         if(user == null) {
             return new DTO<>("User not found",false);

@@ -3,12 +3,11 @@ package com.Tracker.KharchaMonitor.controller;
 
 import com.Tracker.KharchaMonitor.model.Budget;
 import com.Tracker.KharchaMonitor.service.BudgetService;
-import com.Tracker.KharchaMonitor.utils.BudgetDTO;
-import com.Tracker.KharchaMonitor.utils.DTO;
+import com.Tracker.KharchaMonitor.dto.BudgetDTO;
+import com.Tracker.KharchaMonitor.dto.DTO;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -2,7 +2,7 @@ package com.Tracker.KharchaMonitor.controller;
 
 import com.Tracker.KharchaMonitor.model.Transaction;
 import com.Tracker.KharchaMonitor.service.TransactionService;
-import com.Tracker.KharchaMonitor.utils.DTO;
+import com.Tracker.KharchaMonitor.dto.DTO;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
