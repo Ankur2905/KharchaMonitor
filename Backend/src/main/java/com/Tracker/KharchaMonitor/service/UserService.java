@@ -23,7 +23,7 @@ public class UserService {
     private OtpUtils otpUtils;
 
     // Fetch user profile details
-    public com.Tracker.KharchaMonitor.dto.DTO<com.Tracker.KharchaMonitor.dto.UserProfileDTO> getProfileDetails(String username) {
+    public DTO<UserProfileDTO> getProfileDetails(String username) {
         User user = userRepository.findByUsername(username);
         if(user == null) {
             return new DTO<>("User not found!",false,null);
@@ -40,7 +40,7 @@ public class UserService {
     }
 
     // Change Username
-    public DTO changeUsername(String currentUsername, String newUsername) {
+    public DTO<String> changeUsername(String currentUsername, String newUsername) {
         User user = userRepository.findByUsername(currentUsername);
         if(user == null) {
             return new DTO<>("User not found",false);
