@@ -40,7 +40,7 @@ public class UserService {
     }
 
     // Change Username
-    public com.Tracker.KharchaMonitor.dto.DTO changeUsername(String currentUsername, String newUsername) {
+    public DTO changeUsername(String currentUsername, String newUsername) {
         User user = userRepository.findByUsername(currentUsername);
         if(user == null) {
             return new DTO<>("User not found",false);
@@ -54,7 +54,7 @@ public class UserService {
     }
 
     // Change Email
-    public com.Tracker.KharchaMonitor.dto.DTO changeEmail(String currentEmail, String newEmail) {
+    public DTO changeEmail(String currentEmail, String newEmail) {
         User user = userRepository.findByEmail(currentEmail);
         if(user == null) {
             return new DTO<>("User not found",false);
@@ -78,7 +78,7 @@ public class UserService {
     }
 
     // Change Password
-    public com.Tracker.KharchaMonitor.dto.DTO changePassword(String email, String oldPassword, String newPassword) {
+    public DTO changePassword(String email, String oldPassword, String newPassword) {
         User user = userRepository.findByEmail(email);
         if(user == null) {
             return new DTO<>("User not found",false);

@@ -17,7 +17,7 @@ public class TransactionService {
     @Autowired TransactionRepository transactionRepository;
 
     // Create a new Transaction
-    public com.Tracker.KharchaMonitor.dto.DTO<Transaction> createTransaction(Transaction transaction) {
+    public DTO<Transaction> createTransaction(Transaction transaction) {
         transaction.setId(new ObjectId());
         transaction.setDate(LocalDateTime.now());
         Transaction savedTransaction = transactionRepository.save(transaction);
@@ -25,7 +25,7 @@ public class TransactionService {
     }
 
     // Retrieve a transaction by ID
-    public com.Tracker.KharchaMonitor.dto.DTO<Transaction> getTransactionById(ObjectId id) {
+    public DTO<Transaction> getTransactionById(ObjectId id) {
         return transactionRepository.findById(id)
                 .map(transaction -> new DTO<>("Transaction found",true,transaction))
                 .orElse(new DTO<>("Transaction not found", false, null));
@@ -37,7 +37,7 @@ public class TransactionService {
     }
 
     // Update a transaction
-    public com.Tracker.KharchaMonitor.dto.DTO<Transaction> updateTransaction(ObjectId id, Transaction updatedTransaction) {
+    public DTO<Transaction> updateTransaction(ObjectId id, Transaction updatedTransaction) {
         if (!transactionRepository.existsById(id)) {
             return new DTO<>("Transaction not found",false,null);
         }
@@ -57,7 +57,7 @@ public class TransactionService {
     }
 
     // Delete a transaction
-    public com.Tracker.KharchaMonitor.dto.DTO<Void> deleteTransaction(ObjectId id) {
+    public DTO<Void> deleteTransaction(ObjectId id) {
         if (!transactionRepository.existsById(id)) {
             return new DTO<>("Transaction not found",false,null);
         }

@@ -39,7 +39,7 @@ public class AuthService {
 
 
     // Register User with OTP verification
-    public com.Tracker.KharchaMonitor.dto.DTO register(User user) {
+    public DTO register(User user) {
         if(!EmailValidator.isValidEmail(user.getEmail())) {
             return new DTO("Invalid email format.",false);
         }
@@ -63,7 +63,7 @@ public class AuthService {
     }
 
     //Verify OTP
-    public com.Tracker.KharchaMonitor.dto.DTO verifyOtp(String email, String otp) {
+    public DTO verifyOtp(String email, String otp) {
         User user = userRepository.findByEmail(email);
         if(user == null) {
             return new DTO("Email not found",false);
@@ -94,7 +94,7 @@ public class AuthService {
     }
 
     // Reset Password using reset token
-    public com.Tracker.KharchaMonitor.dto.DTO resetPassword(String email, String resetToken, String newPassword) {
+    public DTO resetPassword(String email, String resetToken, String newPassword) {
         User user = userRepository.findByResetToken(resetToken);
         if(user == null || !user.getEmail().equals(email)) {
             return new DTO("Invalid reset token",false);

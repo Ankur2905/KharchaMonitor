@@ -24,7 +24,7 @@ public class BudgetService {
 
 
     // Create Budget
-    public com.Tracker.KharchaMonitor.dto.DTO createBudget(Budget budget) {
+    public DTO createBudget(Budget budget) {
         if (!ObjectId.isValid(String.valueOf(budget.getUserId())) || !userRepository.existsById(new ObjectId(String.valueOf(budget.getUserId())))) {
             return new DTO<>("Invalid or non- existing userId.", false);
         }
@@ -57,7 +57,7 @@ public class BudgetService {
 
 
     // Update Budget
-    public com.Tracker.KharchaMonitor.dto.DTO updateBudget(ObjectId id, Budget updatedBudget) {
+    public DTO updateBudget(ObjectId id, Budget updatedBudget) {
         Optional<Budget> optionalBudget = budgetRepository.findById(id);
         if (optionalBudget.isPresent()) {
             Budget budget = optionalBudget.get();
@@ -75,7 +75,7 @@ public class BudgetService {
 
 
     // Delete Budget
-    public com.Tracker.KharchaMonitor.dto.DTO deleteBudget(ObjectId id) {
+    public DTO deleteBudget(ObjectId id) {
         if (budgetRepository.existsById(id)) {
             budgetRepository.deleteById(id);
             return  new DTO<>("Budget deleted successfully",true);
