@@ -39,13 +39,17 @@ public class BudgetService {
 
 
     // Get Budgets by User ID
-    public List<BudgetDTO> getBudgetByUserId(ObjectId userId) {
+    public DTO<List<BudgetDTO>> getBudgetByUserId(ObjectId userId) {
         List<Budget> budgets = budgetRepository.findByUserId(userId);
-        return budgets.stream()
+
+        if(budgets.isEmpty()) {
+            return new DTO<>("No budgets found for the given user.",false,null);
+        }
+
+        List<BudgetDTO> budgetDTOS = budgets.stream()
                 .map(b -> {
                     BudgetDTO dto = new BudgetDTO();
                     dto.setId(b.getId());
-                    dto.setCategory(b.getCategory());
                     dto.setAmount(b.getAmount());
                     dto.setDescription(b.getDescription());
                     dto.setStartDate(b.getStartDate());
@@ -53,6 +57,8 @@ public class BudgetService {
                     return dto;
                 })
                 .collect(Collectors.toList());
+
+        return new DTO<>("Budgets retrieved successfully.",true,budgetDTOS);
     }
 
 
@@ -61,7 +67,6 @@ public class BudgetService {
         Optional<Budget> optionalBudget = budgetRepository.findById(id);
         if (optionalBudget.isPresent()) {
             Budget budget = optionalBudget.get();
-            budget.setCategory(updatedBudget.getCategory());
             budget.setAmount(updatedBudget.getAmount());
             budget.setDescription(updatedBudget.getDescription());
             budget.setStartDate(updatedBudget.getStartDate());

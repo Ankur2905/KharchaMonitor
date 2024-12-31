@@ -22,9 +22,6 @@ public class Budget {
     private ObjectId userId;
 
     @NonNull
-    private String category;
-
-    @NonNull
     private Double amount;
 
     private String description;

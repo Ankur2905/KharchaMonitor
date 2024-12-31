@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 public class BudgetDTO {
 
     private ObjectId id;
-    private String category;
     private Double amount;
     private String description;
     private LocalDateTime startDate;

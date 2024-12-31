@@ -33,9 +33,14 @@ public class BudgetController {
 
     // Get Budget for a User by User ID
     @GetMapping("/{userId}")
-    public ResponseEntity<List<BudgetDTO>> getBudgetByUserId(@PathVariable String userId) {
+    public ResponseEntity<DTO<List<BudgetDTO>>> getBudgetByUserId(@PathVariable String userId) {
         ObjectId userObjectId = new ObjectId(userId); // Convert String ID to ObjectId
-        return ResponseEntity.ok(budgetService.getBudgetByUserId(userObjectId));
+        DTO<List<BudgetDTO>> result = budgetService.getBudgetByUserId(userObjectId);
+
+        if(!result.success) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+        return ResponseEntity.ok(result);
     }
 
 
