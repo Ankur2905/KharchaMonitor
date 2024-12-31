@@ -68,14 +68,10 @@ public class AuthController {
     // Login with username and Password
     @PostMapping("/login")
     public ResponseEntity<DTO> login(@RequestBody User user) {
-        User foundUser = authService.findByUsername(user.getUsername());
-
-        if(foundUser != null && passwordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
-            if(!foundUser.isVerified()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new DTO("Account is not verified. Please verify via OTP.",false));
-            }
-            return ResponseEntity.ok(new DTO("Login successful.",true));
+        DTO result = authService.login(user);
+        if(!result.success) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new DTO("Invalid username or password!",false));
+        return ResponseEntity.ok(result);
     }
 }

@@ -37,6 +37,11 @@ public class AuthService {
         return userRepository.findByEmail(email) != null;
     }
 
+    // find user by username
+    public User findByUsername(String username){
+        return userRepository.findByUsername(username);
+    }
+
 
     // Register User with OTP verification
     public DTO register(User user) {
@@ -80,7 +85,7 @@ public class AuthService {
     }
 
     // Forgot Password (Generate Reset Token)
-    public com.Tracker.KharchaMonitor.dto.DTO forgotPassword(String email) {
+    public DTO forgotPassword(String email) {
         User user =userRepository.findByEmail(email);
         if(user == null){
             return new DTO("Email not found",false);
@@ -106,9 +111,18 @@ public class AuthService {
         return new DTO("Password reset successfully.",true);
     }
 
-    // find user by username
-    public User findByUsername(String username){
-        return userRepository.findByUsername(username);
+    // Login user with email and password
+    public DTO login(User user) {
+        User foundUser = findByUsername(user.getUsername());
+
+        if (foundUser == null || !passwordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
+            return new DTO("Invalid username or password!", false);
+        }
+        if(!foundUser.isVerified()) {
+            return new DTO("Account is not verified. Please verify via OTP.",false);
+        }
+        return new DTO<>("Login successful",true);
     }
+
 }
 
