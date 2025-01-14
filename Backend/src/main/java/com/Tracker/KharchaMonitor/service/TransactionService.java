@@ -14,7 +14,8 @@ import java.util.List;
 @Service
 public class TransactionService {
 
-    @Autowired TransactionRepository transactionRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     // Create a new Transaction
     public DTO<Transaction> createTransaction(Transaction transaction) {
@@ -85,5 +86,13 @@ public class TransactionService {
         }
 
         return transactionRepository.findByUsername(username);
+    }
+
+    // Fetch transactions for the past month
+    public List<Transaction> getTransactionsForPastMonth(String username) {
+        LocalDateTime startOfMonth = LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime endOfMonth = startOfMonth.plusMonths(1).minusSeconds(1);
+
+        return transactionRepository.findByUsernameAndDateBetween(username, startOfMonth, endOfMonth);
     }
 }
