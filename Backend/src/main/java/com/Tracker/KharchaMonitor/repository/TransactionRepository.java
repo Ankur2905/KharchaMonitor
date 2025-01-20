@@ -9,15 +9,16 @@ import java.util.List;
 
 public interface TransactionRepository extends MongoRepository<Transaction, ObjectId> {
 
-    List<Transaction> findByUsername(String username);
+    List<Transaction> findByUserId(ObjectId userId);
 
-    List<Transaction> findByUsernameAndCategory(String username, String category);
+    List<Transaction> findByUserIdAndCategory(ObjectId userId, String category);
 
-    List<Transaction> findByUsernameAndType(String username, String type);
+    List<Transaction> findByUserIdAndType(ObjectId userId, String type);
 
-    List<Transaction> findByUsernameAndDateBetween(String username, LocalDateTime startDate, LocalDateTime endDate);
+    List<Transaction> findByUserIdAndDateBetween(ObjectId userId, LocalDateTime startDate, LocalDateTime endDate);
 
-    List<Transaction> findByUsernameAndCategoryAndType(String username, String category, String type);
+    List<Transaction> findByUserIdAndCategoryAndType(ObjectId userId, String category, String type);
 
-    List<Transaction> findByUsernameAndCategoryAndTypeAndDateBetween(String username, String category, String type, LocalDateTime startDate, LocalDateTime endDate);
+    List<Transaction> findByUserIdAndCategoryAndTypeAndDateBetween(ObjectId userId, String category, String type, LocalDateTime startDate, LocalDateTime endDate);
+
 }

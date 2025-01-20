@@ -1,5 +1,7 @@
 package com.Tracker.KharchaMonitor.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -16,9 +18,11 @@ import java.time.LocalDateTime;
 public class Budget {
 
     @Id
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId id;
 
     @NonNull
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId userId;
 
     @NonNull

@@ -40,13 +40,16 @@ public class EmailScheduler {
 
     // Generate and send the monthly summary for each user
     private void sendMonthlySummary(String username, String email) {
-        List<Transaction> transactions = transactionService.getTransactionsForPastMonth(username);
+        User user = userRepository.findByUsername(username);
+
+
+        List<Transaction> transactions = transactionService.getTransactionsForPastMonth(user);
 
         double totalSpending = transactionSummary.calculateTotalSpending(transactions);
         Map<String, Double> categorySummary = transactionSummary.calculateCategoryWiseBreakdown(transactions);
 
         String content = emailContent.generateMonthlySummaryContent(username, totalSpending, categorySummary);
-        emailContent.sendMonthlySummaryEmail(email, "Monthly Spending Summary for "+username, content);
+        emailContent.sendEmailToUser(email, "Monthly Spending Summary for "+username, content);
     }
 
 }

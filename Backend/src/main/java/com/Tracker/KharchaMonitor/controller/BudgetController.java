@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/budget")
@@ -20,27 +19,23 @@ public class BudgetController {
     @Autowired
     private BudgetService budgetService;
 
-    //Create Budget
-    @PostMapping
-    public ResponseEntity<DTO> createBudget(@RequestBody Budget budget) {
-        DTO result = budgetService.createBudget(budget);
-        if (!result.success) {
-            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
-    }
-
 
     // Get Budget for a User by User ID
     @GetMapping("/{userId}")
-    public ResponseEntity<DTO<List<BudgetDTO>>> getBudgetByUserId(@PathVariable String userId) {
-        ObjectId userObjectId = new ObjectId(userId); // Convert String ID to ObjectId
-        DTO<List<BudgetDTO>> result = budgetService.getBudgetByUserId(userObjectId);
+    public ResponseEntity<DTO<BudgetDTO>> getBudgetByUserId(@PathVariable String userId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        try {
+            ObjectId userObjectId = new ObjectId(userId);
+            DTO<BudgetDTO> result = budgetService.getBudgetByUserId(userObjectId, page, size);
 
-        if(!result.success) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+            if (!result.success) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+            }
+            return ResponseEntity.ok(result);
         }
-        return ResponseEntity.ok(result);
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new DTO<>("Invalid user ID format",false,null));
+        }
     }
 
 

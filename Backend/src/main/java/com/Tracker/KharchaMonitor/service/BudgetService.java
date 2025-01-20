@@ -9,9 +9,9 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BudgetService {
@@ -23,68 +23,93 @@ public class BudgetService {
     private UserRepository userRepository;
 
 
-    // Create Budget
-    public DTO createBudget(Budget budget) {
-        if (!ObjectId.isValid(String.valueOf(budget.getUserId())) || !userRepository.existsById(new ObjectId(String.valueOf(budget.getUserId())))) {
-            return new DTO<>("Invalid or non- existing userId.", false);
-        }
+    // Create Default Budget
+    public Budget createDefaultBudget(ObjectId userId) {
+        validateUserExists(userId);
 
-        if(budget.getEndDate().isBefore(budget.getStartDate())) {
-            return new DTO<>("End date must be after start date",false);
-        }
+        Budget defaultBudget = new Budget();
+        defaultBudget.setUserId(userId);
+        defaultBudget.setAmount(0.0);
+        defaultBudget.setStartDate(LocalDateTime.now());
 
-        budgetRepository.save(budget);
-        return new DTO<>("Budget created successfully.",true);
+        //set end date to the last day of the current month
+        YearMonth currentMonth = YearMonth.now();
+        LocalDateTime endMonth = currentMonth.atEndOfMonth().atTime(23,59,59);
+        defaultBudget.setEndDate(endMonth);
+
+        return budgetRepository.save(defaultBudget);
     }
 
 
     // Get Budgets by User ID
-    public DTO<List<BudgetDTO>> getBudgetByUserId(ObjectId userId) {
-        List<Budget> budgets = budgetRepository.findByUserId(userId);
+    public DTO<BudgetDTO> getBudgetByUserId(ObjectId userId, int page, int size) {
+        validateUserExists(userId);
 
-        if(budgets.isEmpty()) {
-            return new DTO<>("No budgets found for the given user.",false,null);
+        Optional<Budget> optionalBudget = budgetRepository.findByUserId(userId).stream().findFirst();
+        if (optionalBudget.isEmpty()) {
+            return new DTO<>("No budget found for the given user",false,null);
         }
 
-        List<BudgetDTO> budgetDTOS = budgets.stream()
-                .map(b -> {
-                    BudgetDTO dto = new BudgetDTO();
-                    dto.setId(b.getId());
-                    dto.setAmount(b.getAmount());
-                    dto.setDescription(b.getDescription());
-                    dto.setStartDate(b.getStartDate());
-                    dto.setEndDate(b.getEndDate());
-                    return dto;
-                })
-                .collect(Collectors.toList());
+        Budget budget = optionalBudget.get();
+        BudgetDTO budgetDTO = mapToBudgetDTO(budget);
 
-        return new DTO<>("Budgets retrieved successfully.",true,budgetDTOS);
+        return new DTO<>("Budget retrieved successfully",true,budgetDTO);
     }
 
 
     // Update Budget
-    public DTO updateBudget(ObjectId id, Budget updatedBudget) {
-        Optional<Budget> optionalBudget = budgetRepository.findById(id);
-        if (optionalBudget.isPresent()) {
-            Budget budget = optionalBudget.get();
-            budget.setAmount(updatedBudget.getAmount());
-            budget.setDescription(updatedBudget.getDescription());
-            budget.setStartDate(updatedBudget.getStartDate());
-            budget.setEndDate(updatedBudget.getEndDate());
-            budgetRepository.save(budget);
-            return new DTO<>("Budget updated successfully",true);
+    public DTO updateBudget(ObjectId budgetId, Budget updatedBudget) {
+        Budget budget = budgetRepository.findById(budgetId)
+                .orElseThrow(() -> new IllegalArgumentException("Budget not found"));
+
+        validateBudgetDates(updatedBudget);
+
+        budget.setAmount(updatedBudget.getAmount());
+        budget.setDescription(updatedBudget.getDescription());
+        budget.setStartDate(updatedBudget.getStartDate());
+        budget.setEndDate(updatedBudget.getEndDate());
+        budgetRepository.save(budget);
+
+        return new DTO<>("Budget updated successfully.", true);
+    }
+
+
+    // Delete Budget
+    public DTO deleteBudget(ObjectId budgetId) {
+        if (!budgetRepository.existsById(budgetId)) {
+            return new DTO<>("Budget not found",false);
         }
-        return new DTO<>("Budget not found",false);
+
+        budgetRepository.deleteById(budgetId);
+        return new DTO<>("Budget deleted successfully",true);
     }
 
 
 
-    // Delete Budget
-    public DTO deleteBudget(ObjectId id) {
-        if (budgetRepository.existsById(id)) {
-            budgetRepository.deleteById(id);
-            return  new DTO<>("Budget deleted successfully",true);
+    // ============== Private Helper Methods ===============
+
+    // Validates that the user ID exists
+    private  void validateUserExists(ObjectId userId) {
+        if (userId == null || !userRepository.existsById(userId)) {
+            throw  new IllegalArgumentException("Invalid or non-existing user ID.");
         }
-        return new DTO<>("Budget not found",false);
+    }
+
+    // Validates the Budget dates
+    private void validateBudgetDates(Budget budget) {
+        if (budget.getEndDate().isBefore(budget.getStartDate())) {
+            throw new IllegalArgumentException("End date must be after the start date.");
+        }
+    }
+
+    // Maps a Budget entity to a BudgetDTO
+    private BudgetDTO mapToBudgetDTO(Budget budget) {
+        BudgetDTO budgetDTO = new BudgetDTO();
+        budgetDTO.setId(budget.getId());
+        budgetDTO.setAmount(budget.getAmount());
+        budgetDTO.setDescription(budget.getDescription());
+        budgetDTO.setStartDate(budget.getStartDate());
+        budgetDTO.setEndDate(budget.getEndDate());
+        return budgetDTO;
     }
 }

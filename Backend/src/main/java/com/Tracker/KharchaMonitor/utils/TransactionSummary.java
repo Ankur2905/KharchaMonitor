@@ -13,6 +13,7 @@ public class TransactionSummary {
     // Calculate total spending for the given transactions
     public double calculateTotalSpending(List<Transaction> transactions) {
         return transactions.stream()
+                .filter(transaction -> "expense".equalsIgnoreCase(transaction.getType()))
                 .mapToDouble(Transaction::getAmount)
                 .sum();
     }

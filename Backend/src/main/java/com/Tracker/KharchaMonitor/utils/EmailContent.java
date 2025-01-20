@@ -1,5 +1,6 @@
 package com.Tracker.KharchaMonitor.utils;
 
+import com.Tracker.KharchaMonitor.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -32,8 +33,17 @@ public class EmailContent {
         return report.toString();
     }
 
+    // Generate the content for the budget exceeded alert
+    public String generateBudgetExceededContent(User user, double totalSpending) {
+        return "Dear "+user.getUsername()+".\n\n"+
+                "Your total spending has exceeded your budget.\n"+
+                "Total Spending: "+ totalSpending + "\n"+
+                "Your Budget: "+ user.getBudget().getAmount() +"\n\n"+
+                "Please review your transactions and adjust accordingly.";
+    }
+
     // Send the email with the generated content
-    public void sendMonthlySummaryEmail(String email, String subject, String content) {
+    public void sendEmailToUser(String email, String subject, String content) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject(subject);

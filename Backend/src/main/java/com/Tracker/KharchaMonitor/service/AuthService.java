@@ -1,6 +1,8 @@
 package com.Tracker.KharchaMonitor.service;
 
+import com.Tracker.KharchaMonitor.model.Budget;
 import com.Tracker.KharchaMonitor.model.User;
+import com.Tracker.KharchaMonitor.repository.BudgetRepository;
 import com.Tracker.KharchaMonitor.repository.UserRepository;
 import com.Tracker.KharchaMonitor.dto.DTO;
 import com.Tracker.KharchaMonitor.utils.EmailValidator;
@@ -25,6 +27,12 @@ public class AuthService {
 
     @Autowired
     private OtpUtils otpUtils;
+
+    @Autowired
+    private  BudgetService budgetService;
+
+    @Autowired
+    private BudgetRepository budgetRepository;
 
 
     //Check if username Exists
@@ -62,7 +70,16 @@ public class AuthService {
         user.setOtp(otp);
         user.setVerified(false);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+
+        User savedUser = userRepository.save(user);
+
+        Budget defaultBudget = budgetService.createDefaultBudget(savedUser.getId());
+
+        budgetRepository.save(defaultBudget);
+
+        savedUser.setBudget(defaultBudget);
+        userRepository.save(savedUser);
+
         otpUtils.sendOtp(user.getEmail(),otp);
         return new DTO("User registered. Please verify with OTP sent to your registered email.", true);
     }
