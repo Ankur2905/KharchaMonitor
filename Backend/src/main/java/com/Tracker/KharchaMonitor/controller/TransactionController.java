@@ -38,8 +38,8 @@ public class TransactionController {
 
 
     @GetMapping("/user/{username}")
-    public ResponseEntity<DTO<List<Transaction>>> getAllTransactions(@PathVariable String username) {
-        DTO<List<Transaction>> result = transactionService.getAllTransaction(username);
+    public ResponseEntity<DTO<List<Transaction>>> getAllTransactions(@PathVariable String username, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        DTO<List<Transaction>> result = transactionService.getAllTransaction(username, page, size);
         if (!result.success) {
            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }
@@ -67,8 +67,8 @@ public class TransactionController {
     }
 
     @GetMapping("/filter/{username}")
-    public ResponseEntity<DTO<List<Transaction>>> filterTransactions(@PathVariable String username, @RequestParam(required = false) String category, @RequestParam(required = false) String type, @RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate) {
-        DTO<List<Transaction>> result = transactionService.filterTransaction(username, category, type, startDate, endDate);
+    public ResponseEntity<DTO<List<Transaction>>> filterTransactions(@PathVariable String username, @RequestParam(required = false) String category, @RequestParam(required = false) String type, @RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        DTO<List<Transaction>> result = transactionService.filterTransaction(username, category, type, startDate, endDate, page, size);
         if (!result.success) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }

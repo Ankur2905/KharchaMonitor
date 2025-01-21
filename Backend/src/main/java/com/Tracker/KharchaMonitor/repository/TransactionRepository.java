@@ -2,6 +2,8 @@ package com.Tracker.KharchaMonitor.repository;
 
 import com.Tracker.KharchaMonitor.model.Transaction;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.LocalDateTime;
@@ -11,14 +13,18 @@ public interface TransactionRepository extends MongoRepository<Transaction, Obje
 
     List<Transaction> findByUserId(ObjectId userId);
 
-    List<Transaction> findByUserIdAndCategory(ObjectId userId, String category);
+    Page<Transaction> findByUserId(ObjectId userId, Pageable pageable);
 
-    List<Transaction> findByUserIdAndType(ObjectId userId, String type);
+    Page<Transaction> findByUserIdAndCategory(ObjectId userId, String category, Pageable pageable);
+
+    Page<Transaction> findByUserIdAndType(ObjectId userId, String type, Pageable pageable);
+
+    Page<Transaction> findByUserIdAndDateBetween(ObjectId userId, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
     List<Transaction> findByUserIdAndDateBetween(ObjectId userId, LocalDateTime startDate, LocalDateTime endDate);
 
-    List<Transaction> findByUserIdAndCategoryAndType(ObjectId userId, String category, String type);
+    Page<Transaction> findByUserIdAndCategoryAndType(ObjectId userId, String category, String type, Pageable pageable);
 
-    List<Transaction> findByUserIdAndCategoryAndTypeAndDateBetween(ObjectId userId, String category, String type, LocalDateTime startDate, LocalDateTime endDate);
+    Page<Transaction> findByUserIdAndCategoryAndTypeAndDateBetween(ObjectId userId, String category, String type, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
 }

@@ -9,6 +9,8 @@ import com.Tracker.KharchaMonitor.repository.UserRepository;
 import com.Tracker.KharchaMonitor.utils.TransactionSummary;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -59,19 +61,21 @@ public class TransactionService {
     }
 
     // Retrieve all transaction for a user
-    public DTO<List<Transaction>> getAllTransaction(String username) {
+    public DTO<List<Transaction>> getAllTransaction(String username, int page, int size) {
         User user = userRepository.findByUsername(username);
 
         if (user == null) {
             return new DTO<>("User not found",false,null);
         }
 
-        List<Transaction> transactions = transactionRepository.findByUserId(user.getId());
+        PageRequest pageRequest = PageRequest.of(page, size);
 
-        if(transactions.isEmpty()) {
+        Page<Transaction> transactionsPage = transactionRepository.findByUserId(user.getId(), pageRequest);
+
+        if(transactionsPage.isEmpty()) {
             return new DTO<>("No transaction found",false,null);
         }
-        return new DTO<>("Transaction found",true,transactions);
+        return new DTO<>("Transaction found",true,transactionsPage.getContent());
     }
 
     // Update a transaction
@@ -106,8 +110,8 @@ public class TransactionService {
         return new DTO<>("Transaction deleted Successfully",true,null);
     }
 
-    // Filter transactions
-    public DTO<List<Transaction>> filterTransaction(String username, String category, String type, LocalDateTime startDate, LocalDateTime endDate) {
+    // Filter transactions with Pagination
+    public DTO<List<Transaction>> filterTransaction(String username, String category, String type, LocalDateTime startDate, LocalDateTime endDate, int page, int size) {
 
         User user = userRepository.findByUsername(username);
 
@@ -115,26 +119,29 @@ public class TransactionService {
             return new DTO<>("User not found",false,null);
         }
 
-        List<Transaction> transactions;
+        // Create PageRequest for pagination
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        Page<Transaction> transactionsPage;
 
         if (category != null && type != null && startDate != null && endDate != null) {
-            transactions = transactionRepository.findByUserIdAndCategoryAndTypeAndDateBetween(user.getId(), category, type, startDate, endDate);
+            transactionsPage = transactionRepository.findByUserIdAndCategoryAndTypeAndDateBetween(user.getId(), category, type, startDate, endDate, pageRequest);
         } else if (category != null && type != null) {
-            transactions = transactionRepository.findByUserIdAndCategoryAndType(user.getId(), category, type);
+            transactionsPage = transactionRepository.findByUserIdAndCategoryAndType(user.getId(), category, type, pageRequest);
         } else if (startDate != null && endDate != null) {
-            transactions = transactionRepository.findByUserIdAndDateBetween(user.getId(), startDate, endDate);
+            transactionsPage = transactionRepository.findByUserIdAndDateBetween(user.getId(), startDate, endDate, pageRequest);
         } else if (category != null) {
-            transactions = transactionRepository.findByUserIdAndCategory(user.getId(), category);
+            transactionsPage = transactionRepository.findByUserIdAndCategory(user.getId(), category, pageRequest);
         } else if (type != null) {
-            transactions = transactionRepository.findByUserIdAndType(user.getId(), type);
+            transactionsPage = transactionRepository.findByUserIdAndType(user.getId(), type, pageRequest);
         } else {
-            transactions = transactionRepository.findByUserId(user.getId());
+            transactionsPage = transactionRepository.findByUserId(user.getId(), pageRequest);
         }
 
-        if(transactions.isEmpty()) {
+        if(transactionsPage.isEmpty()) {
             return new DTO<>("No transactions found for the given filters",false,null);
         }
-        return new DTO<>("Transactions found",true,transactions);
+        return new DTO<>("Transactions found",true,transactionsPage.getContent());
     }
 
     // Fetch transactions for the past month
