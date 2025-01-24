@@ -13,7 +13,6 @@ public class BudgetAlertService {
 
     // Send an alert email when the spending exceeds the budget
     public void sendBudgetExceededAlert(User user, double totalSpending) {
-        System.out.println("Sending budget exceeds alert to: " + user.getEmail());
         String subject = "Budget Exceeded Alert!";
         String content = emailContent.generateBudgetExceededContent(user, totalSpending);
 

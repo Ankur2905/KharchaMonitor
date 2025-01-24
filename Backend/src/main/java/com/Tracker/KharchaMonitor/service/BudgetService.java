@@ -1,5 +1,6 @@
 package com.Tracker.KharchaMonitor.service;
 
+import com.Tracker.KharchaMonitor.mapper.DTOMapper;
 import com.Tracker.KharchaMonitor.model.Budget;
 import com.Tracker.KharchaMonitor.repository.BudgetRepository;
 import com.Tracker.KharchaMonitor.repository.UserRepository;
@@ -22,6 +23,14 @@ public class BudgetService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private DTOMapper dtoMapper;
+
+    public BudgetService(BudgetRepository budgetRepository, UserRepository userRepository) {
+        this.budgetRepository = budgetRepository;
+        this.userRepository = userRepository;
+    }
+
 
     // Create Default Budget
     public Budget createDefaultBudget(ObjectId userId) {
@@ -42,7 +51,7 @@ public class BudgetService {
 
 
     // Get Budgets by User ID
-    public DTO<BudgetDTO> getBudgetByUserId(ObjectId userId, int page, int size) {
+    public DTO<BudgetDTO> getBudgetByUserId(ObjectId userId) {
         validateUserExists(userId);
 
         Optional<Budget> optionalBudget = budgetRepository.findByUserId(userId).stream().findFirst();
@@ -51,14 +60,18 @@ public class BudgetService {
         }
 
         Budget budget = optionalBudget.get();
-        BudgetDTO budgetDTO = mapToBudgetDTO(budget);
+        BudgetDTO budgetDTO = dtoMapper.mapToBudgetDTO(budget);
 
         return new DTO<>("Budget retrieved successfully",true,budgetDTO);
     }
 
 
     // Update Budget
-    public DTO updateBudget(ObjectId budgetId, Budget updatedBudget) {
+    public DTO<String> updateBudget(ObjectId budgetId, Budget updatedBudget) {
+        if (updatedBudget == null) {
+            throw new IllegalArgumentException("Updated budget data cannot be null");
+        }
+
         Budget budget = budgetRepository.findById(budgetId)
                 .orElseThrow(() -> new IllegalArgumentException("Budget not found"));
 
@@ -75,7 +88,7 @@ public class BudgetService {
 
 
     // Delete Budget
-    public DTO deleteBudget(ObjectId budgetId) {
+    public DTO<String> deleteBudget(ObjectId budgetId) {
         if (!budgetRepository.existsById(budgetId)) {
             return new DTO<>("Budget not found",false);
         }
@@ -100,16 +113,5 @@ public class BudgetService {
         if (budget.getEndDate().isBefore(budget.getStartDate())) {
             throw new IllegalArgumentException("End date must be after the start date.");
         }
-    }
-
-    // Maps a Budget entity to a BudgetDTO
-    private BudgetDTO mapToBudgetDTO(Budget budget) {
-        BudgetDTO budgetDTO = new BudgetDTO();
-        budgetDTO.setId(budget.getId());
-        budgetDTO.setAmount(budget.getAmount());
-        budgetDTO.setDescription(budget.getDescription());
-        budgetDTO.setStartDate(budget.getStartDate());
-        budgetDTO.setEndDate(budget.getEndDate());
-        return budgetDTO;
     }
 }

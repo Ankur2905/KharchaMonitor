@@ -1,5 +1,6 @@
 package com.Tracker.KharchaMonitor.service;
 
+import com.Tracker.KharchaMonitor.mapper.DTOMapper;
 import com.Tracker.KharchaMonitor.model.User;
 import com.Tracker.KharchaMonitor.repository.UserRepository;
 import com.Tracker.KharchaMonitor.dto.DTO;
@@ -22,6 +23,9 @@ public class UserService {
     @Autowired
     private OtpUtils otpUtils;
 
+    @Autowired
+    private DTOMapper dtoMapper;
+
     // Fetch user profile details
     public DTO<UserProfileDTO> getProfileDetails(String username) {
         User user = userRepository.findByUsername(username);
@@ -29,12 +33,7 @@ public class UserService {
             return new DTO<>("User not found!",false,null);
         }
 
-        // Map User entity to UserProfileDTO
-        UserProfileDTO userProfile = new UserProfileDTO(
-                user.getUsername(),
-                user.getEmail(),
-                user.isVerified()
-        );
+        UserProfileDTO userProfile = dtoMapper.mapToUserProfileDTO(user);
 
         return new DTO<>("User profile fetched successfully",true,userProfile);
     }
@@ -54,7 +53,7 @@ public class UserService {
     }
 
     // Change Email
-    public DTO changeEmail(String currentEmail, String newEmail) {
+    public DTO<String> changeEmail(String currentEmail, String newEmail) {
         User user = userRepository.findByEmail(currentEmail);
         if(user == null) {
             return new DTO<>("User not found",false);
@@ -78,7 +77,7 @@ public class UserService {
     }
 
     // Change Password
-    public DTO changePassword(String email, String oldPassword, String newPassword) {
+    public DTO<String> changePassword(String email, String oldPassword, String newPassword) {
         User user = userRepository.findByEmail(email);
         if(user == null) {
             return new DTO<>("User not found",false);
@@ -90,4 +89,10 @@ public class UserService {
         userRepository.save(user);
         return new DTO<>("Password Updated successfully",true);
     }
+
+
+
+    //================== Private Helper Method ============
+
+
 }

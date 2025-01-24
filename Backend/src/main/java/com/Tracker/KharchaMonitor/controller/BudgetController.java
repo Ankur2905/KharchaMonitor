@@ -22,10 +22,10 @@ public class BudgetController {
 
     // Get Budget for a User by User ID
     @GetMapping("/{userId}")
-    public ResponseEntity<DTO<BudgetDTO>> getBudgetByUserId(@PathVariable String userId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<DTO<BudgetDTO>> getBudgetByUserId(@PathVariable String userId) {
         try {
             ObjectId userObjectId = new ObjectId(userId);
-            DTO<BudgetDTO> result = budgetService.getBudgetByUserId(userObjectId, page, size);
+            DTO<BudgetDTO> result = budgetService.getBudgetByUserId(userObjectId);
 
             if (!result.success) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);

@@ -29,7 +29,7 @@ public class EmailScheduler {
     private EmailContent emailContent;
 
     // Schedule task to send monthly summaries
-    @Scheduled(cron = "0 0 9 1 * ?") // At 9 AM ion the 1st of each month
+    @Scheduled(cron = "0 0 9 1 * ?") // At 9 AM on the 1st of each month
     public void sendMonthlySummariesForAllUsers() {
         Iterable<User> users = userRepository.findAll();
 

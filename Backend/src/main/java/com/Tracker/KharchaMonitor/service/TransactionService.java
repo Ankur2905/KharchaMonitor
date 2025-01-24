@@ -34,13 +34,11 @@ public class TransactionService {
 
     // Create a new Transaction
     public DTO<Transaction> createTransaction(Transaction transaction) {
-        Optional<User> userOptional = userRepository.findById(transaction.getUserId());
+        User user = findUserById(transaction.getUserId());
 
-        if (userOptional.isEmpty()) {
+        if (user == null) {
             return  new DTO<>("User not found",false,null);
         }
-
-        User user = userOptional.get();
 
         transaction.setId(new ObjectId());
         transaction.setDate(LocalDateTime.now());
@@ -80,21 +78,18 @@ public class TransactionService {
 
     // Update a transaction
     public DTO<Transaction> updateTransaction(ObjectId id, Transaction updatedTransaction) {
-        Optional<Transaction> existingTransactionOptional = transactionRepository.findById(id);
-        if (existingTransactionOptional.isEmpty()) {
+        Transaction existingTransaction = findTransactionById(id);
+        if (existingTransaction == null) {
             return  new DTO<>("Transaction not found",false,null);
         }
 
-        Transaction existingTransaction = existingTransactionOptional.get();
-        existingTransaction.setCategory(updatedTransaction.getCategory());
-        existingTransaction.setType(updatedTransaction.getType());
-        existingTransaction.setAmount(updatedTransaction.getAmount());
-        existingTransaction.setDescription(updatedTransaction.getDescription());
-        existingTransaction.setDate(updatedTransaction.getDate());
+        updateTransactionDetails(existingTransaction, updatedTransaction);
         Transaction savedTransaction = transactionRepository.save(existingTransaction);
 
-        Optional<User> userOptional = userRepository.findById(existingTransaction.getUserId());
-        userOptional.ifPresent(this::checkBudgetAndSendAlert);
+        User user = findUserById(existingTransaction.getUserId());
+        if (user != null) {
+            checkBudgetAndSendAlert(user);
+        }
 
         return new DTO<>("Transaction updated successfully",true,savedTransaction);
 
@@ -122,21 +117,7 @@ public class TransactionService {
         // Create PageRequest for pagination
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        Page<Transaction> transactionsPage;
-
-        if (category != null && type != null && startDate != null && endDate != null) {
-            transactionsPage = transactionRepository.findByUserIdAndCategoryAndTypeAndDateBetween(user.getId(), category, type, startDate, endDate, pageRequest);
-        } else if (category != null && type != null) {
-            transactionsPage = transactionRepository.findByUserIdAndCategoryAndType(user.getId(), category, type, pageRequest);
-        } else if (startDate != null && endDate != null) {
-            transactionsPage = transactionRepository.findByUserIdAndDateBetween(user.getId(), startDate, endDate, pageRequest);
-        } else if (category != null) {
-            transactionsPage = transactionRepository.findByUserIdAndCategory(user.getId(), category, pageRequest);
-        } else if (type != null) {
-            transactionsPage = transactionRepository.findByUserIdAndType(user.getId(), type, pageRequest);
-        } else {
-            transactionsPage = transactionRepository.findByUserId(user.getId(), pageRequest);
-        }
+        Page<Transaction> transactionsPage = filterTransactions(user.getId(), category, type, startDate, endDate, pageRequest);
 
         if(transactionsPage.isEmpty()) {
             return new DTO<>("No transactions found for the given filters",false,null);
@@ -168,6 +149,43 @@ public class TransactionService {
                 // Send budget alert if the spending exceeds the budget
                 budgetAlertService.sendBudgetExceededAlert(user, totalSpending);
             }
+        }
+    }
+
+
+    //=============Private Helper Method============
+
+    private User findUserById(ObjectId userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        return userOptional.orElse(null);
+    }
+
+    private Transaction findTransactionById(ObjectId transactionId) {
+        Optional<Transaction> transactionOptional = transactionRepository.findById(transactionId);
+        return transactionOptional.orElse(null);
+    }
+
+    private void updateTransactionDetails(Transaction existingTransaction, Transaction updatedTransaction) {
+        existingTransaction.setCategory(updatedTransaction.getCategory());
+        existingTransaction.setType(updatedTransaction.getType());
+        existingTransaction.setAmount(updatedTransaction.getAmount());
+        existingTransaction.setDescription(updatedTransaction.getDescription());
+        existingTransaction.setDate(updatedTransaction.getDate());
+    }
+
+    private Page<Transaction> filterTransactions(ObjectId userId, String category, String type, LocalDateTime startDate, LocalDateTime endDate, PageRequest pageRequest) {
+        if (category != null && type != null && startDate != null && endDate != null) {
+            return transactionRepository.findByUserIdAndCategoryAndTypeAndDateBetween(userId, category, type, startDate, endDate, pageRequest);
+        } else if (category != null && type != null) {
+            return transactionRepository.findByUserIdAndCategoryAndType(userId, category, type, pageRequest);
+        } else if (startDate != null && endDate != null) {
+            return transactionRepository.findByUserIdAndDateBetween(userId, startDate, endDate, pageRequest);
+        } else if (category != null) {
+            return transactionRepository.findByUserIdAndCategory(userId, category, pageRequest);
+        } else if (type != null) {
+            return transactionRepository.findByUserIdAndType(userId, type, pageRequest);
+        } else {
+            return transactionRepository.findByUserId(userId, pageRequest);
         }
     }
 }
