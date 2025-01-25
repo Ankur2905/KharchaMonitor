@@ -1,5 +1,6 @@
 package com.Tracker.KharchaMonitor.utils;
 
+import com.Tracker.KharchaMonitor.enums.TransactionCategory;
 import com.Tracker.KharchaMonitor.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -15,7 +16,7 @@ public class EmailContent {
     private JavaMailSender mailSender;
 
     // Generate the email content for the monthly summary
-    public String generateMonthlySummaryContent(String username, double totalSpending, Map<String, Double> categorySummary) {
+    public String generateMonthlySummaryContent(String username, double totalSpending, Map<TransactionCategory, Double> categorySummary) {
         if (totalSpending == 0) {
             return "Dear "+ username + ",\n\nNo transactions were recorded for the current month.";
         }

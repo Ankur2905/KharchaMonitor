@@ -1,5 +1,6 @@
 package com.Tracker.KharchaMonitor.scheduler;
 
+import com.Tracker.KharchaMonitor.enums.TransactionCategory;
 import com.Tracker.KharchaMonitor.model.Transaction;
 import com.Tracker.KharchaMonitor.model.User;
 import com.Tracker.KharchaMonitor.repository.UserRepository;
@@ -46,7 +47,7 @@ public class EmailScheduler {
         List<Transaction> transactions = transactionService.getTransactionsForPastMonth(user);
 
         double totalSpending = transactionSummary.calculateTotalSpending(transactions);
-        Map<String, Double> categorySummary = transactionSummary.calculateCategoryWiseBreakdown(transactions);
+        Map<TransactionCategory, Double> categorySummary = transactionSummary.calculateCategoryWiseBreakdown(transactions);
 
         String content = emailContent.generateMonthlySummaryContent(username, totalSpending, categorySummary);
         emailContent.sendEmailToUser(email, "Monthly Spending Summary for "+username, content);

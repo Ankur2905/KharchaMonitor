@@ -1,6 +1,8 @@
 package com.Tracker.KharchaMonitor.model;
 
 
+import com.Tracker.KharchaMonitor.enums.TransactionCategory;
+import com.Tracker.KharchaMonitor.enums.TransactionType;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Getter;
@@ -25,9 +27,9 @@ public class Transaction {
     @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId userId;
 
-    private String category;
+    private TransactionCategory category;
 
-    private String type;  // income or expense
+    private TransactionType type;
 
     private double amount;
 
