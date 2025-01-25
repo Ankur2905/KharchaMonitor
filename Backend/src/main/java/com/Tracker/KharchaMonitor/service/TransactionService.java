@@ -1,6 +1,7 @@
 package com.Tracker.KharchaMonitor.service;
 
 
+import com.Tracker.KharchaMonitor.enums.TransactionType;
 import com.Tracker.KharchaMonitor.model.Transaction;
 import com.Tracker.KharchaMonitor.model.User;
 import com.Tracker.KharchaMonitor.repository.TransactionRepository;
@@ -47,7 +48,7 @@ public class TransactionService {
         user.getTransactions().add(savedTransaction);
         userRepository.save(user);
 
-        checkBudgetAndSendAlert(user);
+        checkBudgetAndSendAlert(user, transaction);
         return new DTO<>("Transaction created successfully", true, savedTransaction);
     }
 
@@ -88,7 +89,7 @@ public class TransactionService {
 
         User user = findUserById(existingTransaction.getUserId());
         if (user != null) {
-            checkBudgetAndSendAlert(user);
+            checkBudgetAndSendAlert(user, updatedTransaction);
         }
 
         return new DTO<>("Transaction updated successfully",true,savedTransaction);
@@ -134,8 +135,8 @@ public class TransactionService {
     }
 
     // Check if the total spending exceeds the user's budget
-    private void checkBudgetAndSendAlert(User user) {
-        if(user != null && user.getBudget() != null) {
+    private void checkBudgetAndSendAlert(User user, Transaction newTransaction) {
+        if(user != null && user.getBudget() != null && newTransaction.getType() == TransactionType.EXPENSE) {
             // Fetch the user's budget
             double userBudget = user.getBudget().getAmount();
 
