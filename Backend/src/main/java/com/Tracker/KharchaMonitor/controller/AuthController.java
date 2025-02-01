@@ -6,7 +6,6 @@ import com.Tracker.KharchaMonitor.dto.DTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,8 +15,6 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
     // Register user and send OTP
     @PostMapping("/signup")
@@ -26,8 +23,6 @@ public class AuthController {
         if(!result.success) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
         }
-
-        authService.register(user);
         return ResponseEntity.ok(result);
     }
 
