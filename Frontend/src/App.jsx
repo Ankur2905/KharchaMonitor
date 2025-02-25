@@ -11,7 +11,16 @@ import {
   Login,
   Register,
   LandingPage,
+  VerifyOtp,
 } from "./pages";
+
+import { ErrorElement } from "./components";
+
+// loaders
+
+// actions
+import { action as registerAction } from "./pages/Register";
+import { action as verifyOtpAction } from "./pages/VerifyOtp";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +31,7 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <LandingPage />,
+        errorElement: <ErrorElement />,
       },
       {
         path: "dashboard",
@@ -29,31 +39,38 @@ const router = createBrowserRouter([
       },
       {
         path: "addTransaction",
-        element: <AddTransaction />
+        element: <AddTransaction />,
       },
       {
         path: "addBudget",
-        element: <BudgetManagement />
+        element: <BudgetManagement />,
       },
       {
         path: "transactions",
-        element: <Transactions />
+        element: <Transactions />,
       },
       {
         path: "about",
-        element: <About />
-      }
+        element: <About />,
+      },
     ],
   },
   {
     path: "/login",
     element: <Login />,
-    errorElement: <Error />,
+    errorElement: <ErrorElement />,
   },
   {
     path: "/register",
     element: <Register />,
-    errorElement: <Error />,
+    errorElement: <ErrorElement />,
+    action: registerAction,
+  },
+  {
+    path: "/verify",
+    element: <VerifyOtp />,
+    errorElement: <ErrorElement />,
+    action: verifyOtpAction,
   },
 ]);
 
