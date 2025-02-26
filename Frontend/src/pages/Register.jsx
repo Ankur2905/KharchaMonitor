@@ -1,4 +1,4 @@
-import { Form, Link, redirect } from "react-router-dom";
+import { Form, Link, redirect, useNavigation } from "react-router-dom";
 import { FormInput, SubmitBtn } from "../components";
 import { customFetch } from "../utils";
 import { toast } from "react-toastify";
@@ -23,6 +23,8 @@ export const action = async ({ request }) => {
 };
 
 const Register = () => {
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
   return (
     <section className="h-screen grid place-items-center">
       <Form
@@ -34,7 +36,7 @@ const Register = () => {
         <FormInput type="email" label="email" name="email" />
         <FormInput type="password" label="password" name="password" />
         <div className="mt-4">
-          <SubmitBtn text="Register" />
+          <SubmitBtn text={isSubmitting ? "Registering..." : "Register"} disabled={isSubmitting} />
         </div>
         <p className="text-center">
           Already a member?

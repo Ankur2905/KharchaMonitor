@@ -8,10 +8,12 @@ export const action = async ({ request }) => {
   const data = Object.fromEntries(formData);
 
   try {
-    const response = await customFetch.post("/auth/verify", data, {
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    });
-    toast.success(response);
+    const response = await customFetch.post(
+      `/auth/verify?email=${encodeURIComponent(
+        data.email
+      )}&otp=${encodeURIComponent(data.otp)}`
+    );
+    toast.success("OTP verified successfully");
     return redirect("/login");
   } catch (error) {
     const errorMessage =
@@ -25,7 +27,6 @@ export const action = async ({ request }) => {
 const VerifyOtp = () => {
   const [searchParams] = useSearchParams();
   const email = searchParams.get("email"); // Get email from URL
-
 
   return (
     <section className="h-screen grid place-items-center">
