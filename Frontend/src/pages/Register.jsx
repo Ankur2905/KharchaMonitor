@@ -11,7 +11,7 @@ export const action = async ({ request }) => {
     const response = await customFetch.post("/auth/signup", data, {
       headers: { "Content-Type": "application/json" },
     });
-    toast.success(response);
+    toast.success("User registered. Please verify with OTP sent to your registered email");
     return redirect(`/verify?email=${encodeURIComponent(data.email)}`);
   } catch (error) {
     const errorMessage =

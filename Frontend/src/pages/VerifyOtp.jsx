@@ -13,12 +13,12 @@ export const action = async ({ request }) => {
         data.email
       )}&otp=${encodeURIComponent(data.otp)}`
     );
-    toast.success("OTP verified successfully");
+    toast.success("User verified successfully.");
     return redirect("/login");
   } catch (error) {
     const errorMessage =
       error?.response?.data?.error?.message ||
-      "please double check your credentials";
+      "please enter the correct OTP";
     toast.error(errorMessage);
     return null;
   }
