@@ -62,8 +62,8 @@ public class AuthController {
 
     // Login with username and Password
     @PostMapping("/login")
-    public ResponseEntity<DTO> login(@RequestBody User user) {
-        DTO result = authService.login(user);
+    public ResponseEntity<DTO<User>> login(@RequestBody User user) {
+        DTO<User> result = authService.login(user);
         if(!result.success) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
         }

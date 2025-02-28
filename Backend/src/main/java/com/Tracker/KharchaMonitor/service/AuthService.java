@@ -126,16 +126,16 @@ public class AuthService {
     }
 
     // Login user with email and password
-    public DTO<String> login(User user) {
+    public DTO<User> login(User user) {
         User foundUser = findByUsername(user.getUsername());
 
         if (foundUser == null || !passwordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
-            return new DTO<>("Invalid username or password!", false);
+            return new DTO<>("Invalid username or password!", false, null);
         }
         if(!foundUser.isVerified()) {
-            return new DTO<>("Account is not verified. Please verify via OTP.",false);
+            return new DTO<>("Account is not verified. Please verify via OTP.",false, null);
         }
-        return new DTO<>("Login successful",true);
+        return new DTO<>("Login successful",true, foundUser);
     }
 
 }
