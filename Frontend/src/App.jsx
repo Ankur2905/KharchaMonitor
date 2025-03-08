@@ -12,18 +12,25 @@ import {
   Register,
   LandingPage,
   VerifyOtp,
+  ForgotPassword,
+  ResetPassword,
 } from "./pages";
 
 import { ErrorElement } from "./components";
 
 // loaders
+import { loader as addTransactionLoader } from "./pages/AddTransaction";
+import { loader as budgetMAnagementLoader } from "./pages/BudgetManagement";
+import { loader as dashboardLoader } from "./pages/Dashboard";
+import { loader as transactionsLoader } from "./pages/Transactions";
 
 // actions
 import { action as registerAction } from "./pages/Register";
 import { action as verifyOtpAction } from "./pages/VerifyOtp";
 import { action as loginAction } from "./pages/Login";
+import { action as forgotPasswordAction } from "./pages/ForgotPassword";
+import { action as resetPasswordAction } from "./pages/ResetPassword";
 import { store } from "./store";
-
 
 const router = createBrowserRouter([
   {
@@ -39,18 +46,22 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <Dashboard />,
+        loader: dashboardLoader(store),
       },
       {
         path: "addTransaction",
         element: <AddTransaction />,
+        loader: addTransactionLoader(store),
       },
       {
         path: "addBudget",
         element: <BudgetManagement />,
+        loader: budgetMAnagementLoader(store),
       },
       {
         path: "transactions",
         element: <Transactions />,
+        loader: transactionsLoader(store),
       },
       {
         path: "about",
@@ -75,6 +86,18 @@ const router = createBrowserRouter([
     element: <VerifyOtp />,
     errorElement: <ErrorElement />,
     action: verifyOtpAction,
+  },
+  {
+    path: "/forgotPassword",
+    element: <ForgotPassword />,
+    errorElement: <ErrorElement />,
+    action: forgotPasswordAction,
+  },
+  {
+    path: "/resetPassword",
+    element: <ResetPassword />,
+    errorElement: <ErrorElement />,
+    action: resetPasswordAction,
   },
 ]);
 
