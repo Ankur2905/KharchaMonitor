@@ -9,3 +9,4 @@ export { default as ErrorElement } from "./ErrorElement";
 export { default as Hero } from "./Hero";
 export { default as Loading } from "./Loading";
 export { default as BudgetInput } from "./BudgetInput";
+export { default as TransactionInput } from "./TransactionInput";
