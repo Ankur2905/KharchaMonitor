@@ -7,6 +7,7 @@ const FormInput = ({ label, name, type, size, value }) => {
       <input
         type={type}
         name={name}
+        id={name}
         className={`input input-bordered ${size}`}
         defaultValue={value}
       />

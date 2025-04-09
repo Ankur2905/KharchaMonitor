@@ -13,7 +13,6 @@ public class DTOMapper {
         BudgetDTO budgetDTO = new BudgetDTO();
         budgetDTO.setId(budget.getId());
         budgetDTO.setAmount(budget.getAmount());
-        budgetDTO.setDescription(budget.getDescription());
         budgetDTO.setStartDate(budget.getStartDate());
         budgetDTO.setEndDate(budget.getEndDate());
         return budgetDTO;

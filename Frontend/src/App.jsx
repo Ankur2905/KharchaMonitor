@@ -30,6 +30,9 @@ import { action as verifyOtpAction } from "./pages/VerifyOtp";
 import { action as loginAction } from "./pages/Login";
 import { action as forgotPasswordAction } from "./pages/ForgotPassword";
 import { action as resetPasswordAction } from "./pages/ResetPassword";
+import { action as budgetAction } from "./pages/BudgetManagement";
+import { action as addTransactionAction } from "./pages/AddTransaction";
+
 import { store } from "./store";
 
 const router = createBrowserRouter([
@@ -52,16 +55,19 @@ const router = createBrowserRouter([
         path: "addTransaction",
         element: <AddTransaction />,
         loader: addTransactionLoader(store),
+        action: addTransactionAction(store),
       },
       {
         path: "addBudget",
         element: <BudgetManagement />,
         loader: budgetMAnagementLoader(store),
+        action: budgetAction(store),
       },
       {
         path: "transactions",
         element: <Transactions />,
         loader: transactionsLoader(store),
+
       },
       {
         path: "about",

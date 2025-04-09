@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -67,7 +67,7 @@ public class TransactionController {
     }
 
     @GetMapping("/filter/{username}")
-    public ResponseEntity<DTO<List<Transaction>>> filterTransactions(@PathVariable String username, @RequestParam(required = false) String category, @RequestParam(required = false) String type, @RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<DTO<List<Transaction>>> filterTransactions(@PathVariable String username, @RequestParam(required = false) String category, @RequestParam(required = false) String type, @RequestParam(required = false) LocalDate startDate, @RequestParam(required = false) LocalDate endDate, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         DTO<List<Transaction>> result = transactionService.filterTransaction(username, category, type, startDate, endDate, page, size);
         if (!result.success) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);

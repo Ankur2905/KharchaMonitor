@@ -14,7 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +42,7 @@ public class TransactionService {
         }
 
         transaction.setId(new ObjectId());
-        transaction.setDate(LocalDateTime.now());
+        transaction.setDate(LocalDate.now());
         Transaction savedTransaction = transactionRepository.save(transaction);
 
         user.getTransactions().add(savedTransaction);
@@ -107,7 +107,7 @@ public class TransactionService {
     }
 
     // Filter transactions with Pagination
-    public DTO<List<Transaction>> filterTransaction(String username, String category, String type, LocalDateTime startDate, LocalDateTime endDate, int page, int size) {
+    public DTO<List<Transaction>> filterTransaction(String username, String category, String type, LocalDate startDate, LocalDate endDate, int page, int size) {
 
         User user = userRepository.findByUsername(username);
 
@@ -128,8 +128,8 @@ public class TransactionService {
 
     // Fetch transactions for the past month
     public List<Transaction> getTransactionsForPastMonth(User user) {
-        LocalDateTime startOfMonth = LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
-        LocalDateTime endOfMonth = startOfMonth.plusMonths(1).minusSeconds(1);
+        LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
+        LocalDate endOfMonth = startOfMonth.plusMonths(1);
 
         return transactionRepository.findByUserIdAndDateBetween(user.getId(), startOfMonth, endOfMonth);
     }
@@ -174,7 +174,7 @@ public class TransactionService {
         existingTransaction.setDate(updatedTransaction.getDate());
     }
 
-    private Page<Transaction> filterTransactions(ObjectId userId, String category, String type, LocalDateTime startDate, LocalDateTime endDate, PageRequest pageRequest) {
+    private Page<Transaction> filterTransactions(ObjectId userId, String category, String type, LocalDate startDate, LocalDate endDate, PageRequest pageRequest) {
         if (category != null && type != null && startDate != null && endDate != null) {
             return transactionRepository.findByUserIdAndCategoryAndTypeAndDateBetween(userId, category, type, startDate, endDate, pageRequest);
         } else if (category != null && type != null) {

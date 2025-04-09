@@ -1,4 +1,4 @@
-import { Form, Link, redirect } from "react-router-dom";
+import { Form, Link, redirect, useNavigation } from "react-router-dom";
 import { FormInput, SubmitBtn } from "../components";
 import { toast } from "react-toastify";
 import { customFetch } from "../utils";
@@ -28,6 +28,8 @@ export const action =
   };
 
 const Login = () => {
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
   return (
     <section className="h-screen grid place-items-center">
       <Form
@@ -38,7 +40,10 @@ const Login = () => {
         <FormInput type="text" label="Username" name="username" />
         <FormInput type="password" label="Password" name="password" />
         <div className="mt-4">
-          <SubmitBtn text="Login" />
+          <SubmitBtn
+            text={isSubmitting ? "Submitting..." : "Login"}
+            disabled={isSubmitting}
+          />
         </div>
         <p className="text-center">
           Not a member yet?{" "}

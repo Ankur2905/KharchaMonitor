@@ -1,4 +1,3 @@
-import { Form } from "react-router-dom";
 import FormInput from "./FormInput";
 import SubmitBtn from "./SubmitBtn";
 
@@ -23,7 +22,7 @@ const formatOption = (option) =>
 
 const TransactionInput = () => {
   return (
-    <Form className="bg-base-200 rounded-md px-8 py-4 grid gap-x-10 gap-y-8 sm:grid-cols-2 items-center">
+    <div className="bg-base-200 rounded-md px-8 py-4 grid gap-x-10 gap-y-8 sm:grid-cols-2 items-center">
       {/* CATEGORY */}
       <div className="form-control">
         <label className="label" htmlFor="category">
@@ -93,7 +92,7 @@ const TransactionInput = () => {
       <div className="col-span-full">
         <SubmitBtn text="Add Transaction" className="w-full" />
       </div>
-    </Form>
+    </div>
   );
 };
 

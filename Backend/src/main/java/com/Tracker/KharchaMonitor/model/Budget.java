@@ -9,7 +9,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 
 @Getter
@@ -28,11 +29,9 @@ public class Budget {
     @NonNull
     private Double amount;
 
-    private String description;
+    @NonNull
+    private LocalDate startDate;
 
     @NonNull
-    private LocalDateTime startDate;
-
-    @NonNull
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 }

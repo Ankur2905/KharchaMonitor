@@ -10,7 +10,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Optional;
 
@@ -39,11 +39,11 @@ public class BudgetService {
         Budget defaultBudget = new Budget();
         defaultBudget.setUserId(userId);
         defaultBudget.setAmount(0.0);
-        defaultBudget.setStartDate(LocalDateTime.now());
+        defaultBudget.setStartDate(LocalDate.now());
 
         //set end date to the last day of the current month
         YearMonth currentMonth = YearMonth.now();
-        LocalDateTime endMonth = currentMonth.atEndOfMonth().atTime(23,59,59);
+        LocalDate endMonth = currentMonth.atEndOfMonth();
         defaultBudget.setEndDate(endMonth);
 
         return budgetRepository.save(defaultBudget);
@@ -78,7 +78,6 @@ public class BudgetService {
         validateBudgetDates(updatedBudget);
 
         budget.setAmount(updatedBudget.getAmount());
-        budget.setDescription(updatedBudget.getDescription());
         budget.setStartDate(updatedBudget.getStartDate());
         budget.setEndDate(updatedBudget.getEndDate());
         budgetRepository.save(budget);

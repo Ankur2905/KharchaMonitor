@@ -1,6 +1,6 @@
 const About = () => {
   return (
-    <section className="min-h-screen flex flex-col items-center px-6 py-12">
+    <section className="min-h-screen flex flex-col justify-between items-center px-6">
       {/* Title Section */}
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
         <h1 className="text-4xl font-bold leading-none tracking-tight sm:text-6xl">
@@ -14,7 +14,7 @@ const About = () => {
       </div>
 
       {/* Description */}
-      <div className="max-w-2xl mx-auto mt-6 text-center">
+      <div className="max-w-2xl mx-auto  text-center">
         <p className="text-lg leading-relaxed">
           <span className="font-semibold">KharchaMonitor</span> is a smart and
           intuitive
@@ -31,7 +31,7 @@ const About = () => {
       </div>
 
       {/* Key Features */}
-      <div className="max-w-2xl mx-auto mt-8">
+      <div className="max-w-2xl mx-auto ">
         <h3 className="text-2xl font-bold mb-4 text-center">Key Features</h3>
         <ul className="list-disc list-inside space-y-3 text-left">
           <li>
@@ -52,12 +52,6 @@ const About = () => {
           </li>
           <li>
             <span className="font-semibold text-primary">
-              Payment Reminders
-            </span>{" "}
-            - Never miss a due date with timely notifications.
-          </li>
-          <li>
-            <span className="font-semibold text-primary">
               Secure & User-Friendly
             </span>{" "}
             - Your data is safe and easily accessible.
@@ -66,7 +60,7 @@ const About = () => {
       </div>
 
       {/* Final CTA */}
-      <p className="mt-8 text-lg font-semibold max-w-2xl mx-auto text-center">
+      <p className=" text-lg font-semibold max-w-2xl mx-auto text-center">
         With <span className="text-primary font-bold">KharchaMonitor</span>,
         managing money is no longer a hassle. Take charge of your financial
         future today!
