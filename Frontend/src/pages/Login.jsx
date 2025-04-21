@@ -17,7 +17,7 @@ export const action =
 
       store.dispatch(loginUser(response.data));
       toast.success("Logged in successfully");
-      return redirect("/");
+      return redirect("/dashboard");
     } catch (error) {
       const errorMessage =
         error?.response?.data?.error?.message ||
@@ -31,36 +31,42 @@ const Login = () => {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   return (
-    <section className="h-screen grid place-items-center">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-base-100 to-base-300 px-4 py-12">
       <Form
         method="POST"
-        className="card w-96 p-8 bg-base-300 shadow-xl flex flex-col gap-y-4"
+        className="card w-full max-w-md bg-base-100 shadow-2xl p-8 rounded-2xl flex flex-col gap-y-5"
       >
-        <h4 className="text-center text-3xl font-bold">Login</h4>
+        <h4 className="text-center text-3xl font-extrabold text-primary">
+          Login
+        </h4>
+
         <FormInput type="text" label="Username" name="username" />
         <FormInput type="password" label="Password" name="password" />
+
         <div className="mt-4">
           <SubmitBtn
             text={isSubmitting ? "Submitting..." : "Login"}
             disabled={isSubmitting}
           />
         </div>
-        <p className="text-center">
-          Not a member yet?{" "}
+
+        <p className="text-center text-sm text-base-content/80">
+          Not a member yet?
           <Link
             to="/register"
-            className="ml-2 link link-hover link-primary-capitalize"
+            className="ml-2 text-primary hover:underline font-medium"
           >
             Register
           </Link>
         </p>
-        <p className="text-center -mt-3">
-          Forgot your password?{" "}
+
+        <p className="text-center text-sm text-base-content/80 -mt-2">
+          Forgot your password?
           <Link
             to="/forgotPassword"
-            className="ml-2 link link-hover link-primary-capitalize"
+            className="ml-2 text-secondary hover:underline font-medium"
           >
-            Reset It Here
+            Reset it here
           </Link>
         </p>
       </Form>

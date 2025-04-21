@@ -33,6 +33,7 @@ const TransactionInput = () => {
           id="category"
           className="select select-sm w-full"
           defaultValue=""
+          required
         >
           <option value="" disabled>
             Select Category
@@ -55,6 +56,7 @@ const TransactionInput = () => {
           id="type"
           className="select select-sm w-full"
           defaultValue=""
+          required
         >
           <option value="" disabled>
             Select Type

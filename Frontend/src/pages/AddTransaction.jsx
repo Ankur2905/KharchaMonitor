@@ -30,7 +30,7 @@ export const action =
       });
 
       toast.success("transaction added successfully");
-      return redirect("/");
+      return redirect("/transactions");
     } catch (error) {
       const errorMessage =
         error?.response?.data?.error?.message || "something went wrong...";

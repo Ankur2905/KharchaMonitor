@@ -4,7 +4,7 @@ import {
   About,
   AddTransaction,
   BudgetManagement,
-  Dashboard,
+  DashboardLayout,
   HomeLayout,
   Transactions,
   Error,
@@ -21,7 +21,6 @@ import { ErrorElement } from "./components";
 // loaders
 import { loader as addTransactionLoader } from "./pages/AddTransaction";
 import { loader as budgetMAnagementLoader } from "./pages/BudgetManagement";
-import { loader as dashboardLoader } from "./pages/Dashboard";
 import { loader as transactionsLoader } from "./pages/Transactions";
 
 // actions
@@ -44,66 +43,65 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <LandingPage />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
         errorElement: <ErrorElement />,
+        action: loginAction(store),
+      },
+      {
+        path: "/register",
+        element: <Register />,
+        errorElement: <ErrorElement />,
+        action: registerAction,
+      },
+      {
+        path: "/verify",
+        element: <VerifyOtp />,
+        errorElement: <ErrorElement />,
+        action: verifyOtpAction,
+      },
+      {
+        path: "/forgotPassword",
+        element: <ForgotPassword />,
+        errorElement: <ErrorElement />,
+        action: forgotPasswordAction,
+      },
+      {
+        path: "/resetPassword",
+        element: <ResetPassword />,
+        errorElement: <ErrorElement />,
+        action: resetPasswordAction,
       },
       {
         path: "dashboard",
-        element: <Dashboard />,
-        loader: dashboardLoader(store),
-      },
-      {
-        path: "addTransaction",
-        element: <AddTransaction />,
-        loader: addTransactionLoader(store),
-        action: addTransactionAction(store),
-      },
-      {
-        path: "addBudget",
-        element: <BudgetManagement />,
-        loader: budgetMAnagementLoader(store),
-        action: budgetAction(store),
-      },
-      {
-        path: "transactions",
-        element: <Transactions />,
-        loader: transactionsLoader(store),
-
-      },
-      {
-        path: "about",
-        element: <About />,
+        element: <DashboardLayout />,
+        children: [
+          {
+            index: true,
+            element: <AddTransaction />,
+            loader: addTransactionLoader(store),
+            action: addTransactionAction(store),
+          },
+          {
+            path: "addBudget",
+            element: <BudgetManagement />,
+            loader: budgetMAnagementLoader(store),
+            action: budgetAction(store),
+          },
+          {
+            path: "transactions",
+            element: <Transactions />,
+            loader: transactionsLoader(store),
+          },
+          {
+            path: "about",
+            element: <About />,
+          },
+        ],
       },
     ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
-    errorElement: <ErrorElement />,
-    action: loginAction(store),
-  },
-  {
-    path: "/register",
-    element: <Register />,
-    errorElement: <ErrorElement />,
-    action: registerAction,
-  },
-  {
-    path: "/verify",
-    element: <VerifyOtp />,
-    errorElement: <ErrorElement />,
-    action: verifyOtpAction,
-  },
-  {
-    path: "/forgotPassword",
-    element: <ForgotPassword />,
-    errorElement: <ErrorElement />,
-    action: forgotPasswordAction,
-  },
-  {
-    path: "/resetPassword",
-    element: <ResetPassword />,
-    errorElement: <ErrorElement />,
-    action: resetPasswordAction,
   },
 ]);
 

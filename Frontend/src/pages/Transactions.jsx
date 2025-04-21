@@ -1,19 +1,27 @@
-import { redirect } from "react-router-dom";
-import { toast } from "react-toastify"
+import { redirect, useLoaderData } from "react-router-dom";
+import { toast } from "react-toastify";
+import { TransactionsList } from "../components";
 
 export const loader = (store) => () => {
   const user = store.getState().userState.user;
 
-  if(!user) {
+  if (!user) {
     toast.warn("Please login first");
     return redirect("/login");
   }
-  return null;
-}
+
+  const { username } = user;
+
+  return { username };
+};
 
 const Transactions = () => {
+  const { username } = useLoaderData();
+
   return (
-    <div>Transactions</div>
-  )
-}
-export default Transactions
+    <>
+      <TransactionsList />
+    </>
+  );
+};
+export default Transactions;

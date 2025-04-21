@@ -1,0 +1,64 @@
+<svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+    <!-- Theme-adaptive design using CSS variables -->
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --bg: transparent;
+        }
+    </style>
+    
+    <!-- Modern phone mockup -->
+    <rect x="200" y="50" width="200" height="320" rx="30" fill="var(--bg)" stroke="var(--primary)" stroke-width="2" stroke-opacity="0.8"/>
+    
+    <!-- App screen with glass morphism effect -->
+    <rect x="210" y="60" width="180" height="300" rx="15" fill="var(--bg)" fill-opacity="0.3" stroke="var(--primary)" stroke-width="1" stroke-opacity="0.3"/>
+    <rect x="210" y="60" width="180" height="50" rx="15" fill="var(--primary)" fill-opacity="0.8"/>
+    
+    <!-- 3D pie chart -->
+    <path d="M300 180 L300 130 A50 50 0 0 1 350 180 Z" fill="var(--secondary)" fill-opacity="0.9"/>
+    <path d="M300 180 L350 180 A50 50 0 0 1 330 230 Z" fill="var(--secondary)" fill-opacity="0.7"/>
+    <path d="M300 180 L330 230 A50 50 0 0 1 270 230 Z" fill="var(--accent)" fill-opacity="0.9"/>
+    <path d="M300 180 L270 230 A50 50 0 0 1 250 180 Z" fill="var(--accent)" fill-opacity="0.7"/>
+    <path d="M300 180 L250 180 A50 50 0 0 1 300 130 Z" fill="url(#gradient)" fill-opacity="0.9"/>
+    
+    <!-- Gradient definition -->
+    <defs>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="var(--primary)"/>
+            <stop offset="100%" stop-color="var(--secondary)"/>
+        </linearGradient>
+    </defs>
+    
+    <!-- Interactive budget bars -->
+    <rect x="220" y="250" width="160" height="8" rx="4" fill="var(--bg)" stroke="var(--primary)" stroke-width="1" stroke-opacity="0.2"/>
+    <rect x="220" y="250" width="120" height="8" rx="4" fill="var(--primary)"/>
+    
+    <rect x="220" y="270" width="160" height="8" rx="4" fill="var(--bg)" stroke="var(--secondary)" stroke-width="1" stroke-opacity="0.2"/>
+    <rect x="220" y="270" width="80" height="8" rx="4" fill="var(--secondary)"/>
+    
+    <!-- Floating financial elements -->
+    <!-- 3D coin stack -->
+    <g transform="translate(80 100)">
+        <circle r="28" fill="var(--accent)" opacity="0.9"/>
+        <circle r="24" fill="url(#coinGradient)"/>
+        <circle cx="5" cy="-30" r="22" fill="var(--primary)" opacity="0.9"/>
+        <circle cx="5" cy="-30" r="18" fill="url(#coinGradient)"/>
+    </g>
+    
+    <!-- Growth chart with marker dots -->
+    <path d="M450 150 L470 130 L490 170 L510 140 L530 190" stroke="var(--secondary)" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <circle cx="450" cy="150" r="4" fill="var(--secondary)"/>
+    <circle cx="490" cy="170" r="4" fill="var(--secondary)"/>
+    <circle cx="530" cy="190" r="4" fill="var(--secondary)"/>
+    
+    <!-- Minimal credit card -->
+    <rect x="440" y="220" width="120" height="70" rx="8" fill="var(--bg)" stroke="var(--primary)" stroke-width="1.5"/>
+    <rect x="450" y="235" width="100" height="8" rx="4" fill="var(--primary)" fill-opacity="0.6"/>
+    <rect x="450" y="255" width="40" height="6" rx="3" fill="var(--primary)"/>
+    
+    <!-- Digital wallet icon -->
+    <rect x="460" y="270" width="20" height="15" rx="3" fill="var(--secondary)"/>
+    <rect x="485" y="270" width="20" height="15" rx="3" fill="var(--accent)"/>
+</svg>

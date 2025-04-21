@@ -29,14 +29,18 @@ const VerifyOtp = () => {
   const email = searchParams.get("email"); // Get email from URL
 
   return (
-    <section className="h-screen grid place-items-center">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-base-100 to-base-300 px-4 py-12">
       <Form
         method="POST"
-        className="card w-96 p-8 bg-base-300 shadow-lg  flex flex-col gap-y-4"
+        className="card w-full max-w-md bg-base-100 shadow-2xl p-8 rounded-2xl flex flex-col gap-y-5"
       >
-        <h4 className="text-center text-3xl font-bold">Verify OTP</h4>
+        <h4 className="text-center text-3xl font-extrabold text-primary">
+          Verify OTP
+        </h4>
+
         <FormInput type="hidden" name="email" value={email} />
         <FormInput type="text" label="OTP" name="otp" />
+
         <div className="mt-4">
           <SubmitBtn text="Submit" />
         </div>
