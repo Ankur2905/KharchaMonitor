@@ -1,25 +1,44 @@
 import { redirect, useLoaderData } from "react-router-dom";
 import { toast } from "react-toastify";
-import { TransactionsList } from "../components";
+import { SectionTitle, TransactionsList } from "../components";
+import { customFetch } from "../utils";
 
-export const loader = (store) => () => {
-  const user = store.getState().userState.user;
+export const loader =
+  (store) =>
+  async ({ request }) => {
+    const user = store.getState().userState.user;
 
-  if (!user) {
-    toast.warn("Please login first");
-    return redirect("/login");
-  }
+    if (!user) {
+      toast.warn("Please login first");
+      return redirect("/login");
+    }
 
-  const { username } = user;
 
-  return { username };
-};
+    try {
+      const response = await customFetch.get(
+        `/transactions/user/${user.username}`
+      );
+      return { transactions: response.data.data };
+    } catch (error) {
+      console.log(error);
+      const errorMessage =
+        error?.response?.data?.error?.message ||
+        "There was an error placing your order";
+      toast.error(errorMessage);
+      if (error?.response?.status === 401 || 403) return redirect("/login");
+    }
+    return null;
+  };
 
 const Transactions = () => {
-  const { username } = useLoaderData();
+  const { transactions } = useLoaderData();
+  if (transactions.length < 1) {
+    return <SectionTitle text="No transactions available" />;
+  }
 
   return (
     <>
+      <SectionTitle text="Your transactions" />
       <TransactionsList />
     </>
   );
