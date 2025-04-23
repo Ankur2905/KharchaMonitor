@@ -7,5 +7,4 @@ export { default as Loading } from "./Loading";
 export { default as BudgetInput } from "./BudgetInput";
 export { default as TransactionInput } from "./TransactionInput";
 export { default as TransactionsList } from "./TransactionsList";
-export { default as Logo } from "./Logo";
 export { default as SectionTitle } from "./SectionTitle";

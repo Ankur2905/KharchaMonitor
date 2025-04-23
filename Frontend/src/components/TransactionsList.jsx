@@ -1,10 +1,36 @@
 import { useLoaderData } from "react-router-dom"
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 import day from "dayjs"
 import advanceFormat from "dayjs/plugin/advancedFormat";
+import { customFetch } from "../utils";
+import { useState } from "react";
+import { toast } from "react-toastify";
 day.extend(advanceFormat);
 
 const TransactionsList = () => {
-    const {transactions} = useLoaderData();
+    const {transactions: initailTransactions} = useLoaderData();
+    const [transactions, setTransactions] = useState(initailTransactions)
+
+    const handleDelete = async (id) => {
+      const confirmed = window.confirm(
+        "Are you sure you want to delete this transaction?"
+      );
+      if (!confirmed) {
+        return;
+      }
+      try {
+        const response = await customFetch.delete(`/transactions/${id}`);
+
+        if (response.data.success) {
+          setTransactions((prev) => prev.filter((txn) => txn.id !== id));
+          toast.success("Transactions deleted successfully.");
+        }
+      } catch (error) {
+        toast.error("Server error while deleting transaction");
+        console.log(error);
+        
+      }
+    };
     
   return (
     <div className="mt-10 px-4 sm:px-8">
@@ -24,6 +50,7 @@ const TransactionsList = () => {
               <th className="p-4 text-left font-semibold hidden md:table-cell">
                 Description
               </th>
+              <th className="p-4 text-left font-semibold">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -34,7 +61,7 @@ const TransactionsList = () => {
                 return (
                   <tr
                     key={id}
-                    className="hover:bg-base-200  even:bg-base-100 odd:bg-base-200"
+                    className="hover:bg-base-200 even:bg-base-100 odd:bg-base-200"
                   >
                     <td className="p-4 capitalize text-base-content">
                       {category.toLowerCase()}
@@ -54,6 +81,20 @@ const TransactionsList = () => {
                     <td className="p-4 text-base-content">{formattedDate}</td>
                     <td className="p-4 hidden md:table-cell capitalize text-base-content/70">
                       {description?.trim() ? description : "—"}
+                    </td>
+                    <td className="p-4 flex gap-3 text-lg">
+                      <button
+                        onClick={() => handleEdit(id)}
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        <FiEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(id)}
+                        className="text-red-600 hover:text-red-800"
+                      >
+                        <FiTrash2 />
+                      </button>
                     </td>
                   </tr>
                 );

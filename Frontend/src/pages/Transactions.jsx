@@ -23,7 +23,7 @@ export const loader =
       console.log(error);
       const errorMessage =
         error?.response?.data?.error?.message ||
-        "There was an error placing your order";
+        "There was an error";
       toast.error(errorMessage);
       if (error?.response?.status === 401 || 403) return redirect("/login");
     }
