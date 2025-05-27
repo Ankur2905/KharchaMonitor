@@ -42,7 +42,9 @@ public class TransactionService {
         }
 
         transaction.setId(new ObjectId());
-        transaction.setDate(LocalDate.now());
+        if(transaction.getDate() == null) {
+            transaction.setDate(LocalDate.now());
+        }
         Transaction savedTransaction = transactionRepository.save(transaction);
 
         user.getTransactions().add(savedTransaction);
