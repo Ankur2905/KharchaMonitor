@@ -14,6 +14,7 @@ import {
   VerifyOtp,
   ForgotPassword,
   ResetPassword,
+  EditTransaction
 } from "./pages";
 
 import { ErrorElement } from "./components";
@@ -22,6 +23,7 @@ import { ErrorElement } from "./components";
 import { loader as addTransactionLoader } from "./pages/AddTransaction";
 import { loader as budgetMAnagementLoader } from "./pages/BudgetManagement";
 import { loader as transactionsLoader } from "./pages/Transactions";
+import { loader as editTransactionLoader } from "./pages/EditTransaction";
 
 // actions
 import { action as registerAction } from "./pages/Register";
@@ -31,6 +33,7 @@ import { action as forgotPasswordAction } from "./pages/ForgotPassword";
 import { action as resetPasswordAction } from "./pages/ResetPassword";
 import { action as budgetAction } from "./pages/BudgetManagement";
 import { action as addTransactionAction } from "./pages/AddTransaction";
+import { action as editTransactionAction } from "./pages/EditTransaction";
 
 import { store } from "./store";
 
@@ -94,6 +97,12 @@ const router = createBrowserRouter([
             path: "transactions",
             element: <Transactions />,
             loader: transactionsLoader(store),
+          },
+          {
+            path: "edit-transaction/:id",
+            element: <EditTransaction />,
+            loader: editTransactionLoader(store),
+            action: editTransactionAction,
           },
           {
             path: "about",

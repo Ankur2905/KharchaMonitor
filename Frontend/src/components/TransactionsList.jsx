@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom"
+import { Link, useLoaderData } from "react-router-dom"
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import day from "dayjs"
 import advanceFormat from "dayjs/plugin/advancedFormat";
@@ -83,12 +83,12 @@ const TransactionsList = () => {
                       {description?.trim() ? description : "—"}
                     </td>
                     <td className="p-4 flex gap-3 text-lg">
-                      <button
-                        onClick={() => handleEdit(id)}
+                      <Link
+                        to={`../edit-transaction/${id}`}
                         className="text-blue-600 hover:text-blue-800"
                       >
                         <FiEdit />
-                      </button>
+                      </Link>
                       <button
                         onClick={() => handleDelete(id)}
                         className="text-red-600 hover:text-red-800"
