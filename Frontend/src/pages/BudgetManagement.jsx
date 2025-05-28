@@ -30,7 +30,7 @@ export const action =
       });
 
       toast.success("Budget updated successfully");
-      return redirect(".");
+      return redirect("/dashboard");
     } catch (error) {
       const errorMessage =
         error?.response?.data?.error?.message || "something went wrong...";

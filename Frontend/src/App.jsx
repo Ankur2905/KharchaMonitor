@@ -14,7 +14,8 @@ import {
   VerifyOtp,
   ForgotPassword,
   ResetPassword,
-  EditTransaction
+  EditTransaction,
+  Dashboard
 } from "./pages";
 
 import { ErrorElement } from "./components";
@@ -24,6 +25,7 @@ import { loader as addTransactionLoader } from "./pages/AddTransaction";
 import { loader as budgetMAnagementLoader } from "./pages/BudgetManagement";
 import { loader as transactionsLoader } from "./pages/Transactions";
 import { loader as editTransactionLoader } from "./pages/EditTransaction";
+import { loader as DashboardLoader } from "./pages/Dashboard";
 
 // actions
 import { action as registerAction } from "./pages/Register";
@@ -83,6 +85,11 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
+            element: <Dashboard />,
+            loader: DashboardLoader(store),
+          },
+          {
+            path: "addTransaction",
             element: <AddTransaction />,
             loader: addTransactionLoader(store),
             action: addTransactionAction(store),

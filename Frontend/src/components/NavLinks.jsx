@@ -2,10 +2,11 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 const links = [
-  { id: 1, url: ".", text: "Add Transaction" },
-  { id: 2, url: "addBudget", text: "Budget Management" },
-  { id: 3, url: "transactions", text: "Transactions" },
-  { id: 4, url: "about", text: "About" },
+  { id: 1, url: ".", text: "Dashboard" },
+  { id: 2, url: "addTransaction", text: "Add Transaction" },
+  { id: 3, url: "addBudget", text: "Budget Management" },
+  { id: 4, url: "transactions", text: "Transactions" },
+  { id: 5, url: "about", text: "About" },
 ];
 
 const NavLinks = () => {
@@ -16,6 +17,7 @@ const NavLinks = () => {
         const { id, url, text } = link;
         if (
           (url === "." ||
+            url === "addTransaction" ||
             url === "addBudget" ||
             url === "about" ||
             url === "transactions") &&

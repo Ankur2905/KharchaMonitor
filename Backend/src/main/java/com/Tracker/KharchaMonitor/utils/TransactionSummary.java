@@ -5,6 +5,7 @@ import com.Tracker.KharchaMonitor.enums.TransactionType;
 import com.Tracker.KharchaMonitor.model.Transaction;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +14,42 @@ import java.util.Map;
 public class TransactionSummary {
 
     // Calculate total spending for the given transactions
-    public double calculateTotalSpending(List<Transaction> transactions) {
+    public double calculateTotalMonthlySpending(List<Transaction> transactions, Integer year, Integer month) {
+        LocalDate now = LocalDate.now();
+        int targetYear = (year != null) ? year : now.getYear();
+        int targetMonth = (month != null) ? month : now.getMonthValue();
         return transactions.stream()
                 .filter(transaction -> TransactionType.EXPENSE.equals(transaction.getType()))
+                .filter(transaction -> {
+                    LocalDate date = transaction.getDate();
+                    return date.getYear() == targetYear && date.getMonthValue() == targetMonth;
+                })
                 .mapToDouble(Transaction::getAmount)
                 .sum();
+    }
+
+    public double calculateTotalMonthlySpending(List<Transaction> transactions) {
+        return calculateTotalMonthlySpending(transactions, null, null);
+    }
+
+    // Calculate total income for the given transactions
+    public double calculateTotalMonthlyIncome(List<Transaction> transactions, Integer year, Integer month) {
+        LocalDate now = LocalDate.now();
+        int targetYear = (year != null) ? year : now.getYear();
+        int targetMonth = (month != null) ? month : now.getMonthValue();
+
+        return transactions.stream()
+                .filter(transaction -> TransactionType.INCOME.equals(transaction.getType()))
+                .filter(transaction -> {
+                    LocalDate date = transaction.getDate();
+                    return date.getYear() == targetYear && date.getMonthValue() == targetMonth;
+                })
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+    }
+
+    public double calculateTotalMonthlyIncome(List<Transaction> transactions) {
+        return calculateTotalMonthlyIncome(transactions, null, null);
     }
 
     // Calculate category-wise breakdown of spending

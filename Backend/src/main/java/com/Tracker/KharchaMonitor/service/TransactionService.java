@@ -128,6 +128,24 @@ public class TransactionService {
         return new DTO<>("Transactions found",true,transactionsPage.getContent());
     }
 
+    // Get total income and total spending
+    public double[] getDetails(String username) {
+        User user = userRepository.findByUsername(username);
+
+        // Fetch al transactions for the user
+        List<Transaction> transactions = transactionRepository.findByUserId(user.getId());
+
+        double userBudget = user.getBudget().getAmount();
+
+        // Calculate total spending
+        double totalSpending = transactionSummary.calculateTotalMonthlySpending(transactions);
+
+        // Calculate total income
+        double totalIncome = transactionSummary.calculateTotalMonthlyIncome(transactions);
+
+        return new double[]{userBudget, totalIncome, totalSpending};
+    }
+
     // Fetch transactions for the past month
     public List<Transaction> getTransactionsForPastMonth(User user) {
         LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
@@ -146,7 +164,7 @@ public class TransactionService {
             List<Transaction> transactions = transactionRepository.findByUserId(user.getId());
 
             // Calculate total spending
-            double totalSpending = transactionSummary.calculateTotalSpending(transactions);
+            double totalSpending = transactionSummary.calculateTotalMonthlySpending(transactions);
 
             if (totalSpending > userBudget) {
                 // Send budget alert if the spending exceeds the budget

@@ -1,6 +1,7 @@
 package com.Tracker.KharchaMonitor.controller;
 
 import com.Tracker.KharchaMonitor.model.Transaction;
+import com.Tracker.KharchaMonitor.model.User;
 import com.Tracker.KharchaMonitor.service.TransactionService;
 import com.Tracker.KharchaMonitor.dto.DTO;
 import org.bson.types.ObjectId;
@@ -73,6 +74,14 @@ public class TransactionController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/user/{username}/details")
+    public ResponseEntity<double[]> getTransactionDetails(@PathVariable String username) {
+
+        double[] details = transactionService.getDetails(username);
+
+        return ResponseEntity.ok(details);
     }
 
 }
