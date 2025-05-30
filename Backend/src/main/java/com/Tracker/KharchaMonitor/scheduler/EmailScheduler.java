@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -40,14 +41,18 @@ public class EmailScheduler {
     }
 
     // Generate and send the monthly summary for each user
-    private void sendMonthlySummary(String username, String email) {
+    public void sendMonthlySummary(String username, String email) {
         User user = userRepository.findByUsername(username);
 
 
         List<Transaction> transactions = transactionService.getTransactionsForPastMonth(user);
 
-        double totalSpending = transactionSummary.calculateTotalMonthlySpending(transactions);
-        Map<TransactionCategory, Double> categorySummary = transactionSummary.calculateCategoryWiseBreakdown(transactions);
+        LocalDate lastMonth = LocalDate.now().minusMonths(1);
+        int year = lastMonth.getYear();
+        int month = lastMonth.getMonthValue();
+
+        double totalSpending = transactionSummary.calculateTotalMonthlySpending(transactions, year, month);
+        Map<TransactionCategory, Double> categorySummary = transactionSummary.calculateCategoryWiseBreakdown(transactions, year, month);
 
         String content = emailContent.generateMonthlySummaryContent(username, totalSpending, categorySummary);
         emailContent.sendEmailToUser(email, "Monthly Spending Summary for "+username, content);

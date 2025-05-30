@@ -76,8 +76,14 @@ public class TransactionService {
 
         Page<Transaction> transactionsPage = transactionRepository.findByUserId(user.getId(), pageRequest);
 
-        if(transactionsPage.isEmpty()) {
-            return new DTO<>("No transaction found",false,null);
+        if (transactionsPage.isEmpty()) {
+            PaginatedTransactionDTO paginatedData = new PaginatedTransactionDTO(
+                    List.of(),
+                    0,
+                    0,
+                    page
+            );
+            return new DTO<>("No transactions found", true, paginatedData);
         }
 
         PaginatedTransactionDTO paginatedData = new PaginatedTransactionDTO(
@@ -159,8 +165,9 @@ public class TransactionService {
 
     // Fetch transactions for the past month
     public List<Transaction> getTransactionsForPastMonth(User user) {
-        LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
-        LocalDate endOfMonth = startOfMonth.plusMonths(1);
+        LocalDate startOfMonth = LocalDate.now().minusMonths(1).withDayOfMonth(1);
+        LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+
 
         return transactionRepository.findByUserIdAndDateBetween(user.getId(), startOfMonth, endOfMonth);
     }

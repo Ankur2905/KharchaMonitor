@@ -53,12 +53,19 @@ public class TransactionSummary {
     }
 
     // Calculate category-wise breakdown of spending
-    public Map<TransactionCategory, Double> calculateCategoryWiseBreakdown(List<Transaction> transactions) {
+    public Map<TransactionCategory, Double> calculateCategoryWiseBreakdown(List<Transaction> transactions, Integer year, Integer month) {
         Map<TransactionCategory, Double> categorySummary = new HashMap<>();
 
+        LocalDate now = LocalDate.now();
+        int targetYear = (year != null) ? year : now.getYear();
+        int targetMonth = (month != null) ? month : now.getMonthValue();
+
         for (Transaction transaction : transactions) {
-            TransactionCategory category = transaction.getCategory();
-            categorySummary.put(category, categorySummary.getOrDefault(category,0.0) + transaction.getAmount());
+            LocalDate date = transaction.getDate();
+            if (date.getYear() == targetYear && date.getMonthValue() == targetMonth) {
+                TransactionCategory category = transaction.getCategory();
+                categorySummary.put(category, categorySummary.getOrDefault(category, 0.0) + transaction.getAmount());
+            }
         }
 
         return categorySummary;

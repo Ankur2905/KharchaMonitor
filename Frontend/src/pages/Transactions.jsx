@@ -20,9 +20,7 @@ export const loader =
     try {
       const response = await customFetch.get(
         `/transactions/user/${user.username}?page=${page}&size=${size}`
-      );
-      console.log(response);
-      
+      );    
       
       return { data: response.data.data};
     } catch (error) {
@@ -40,12 +38,19 @@ const Transactions = () => {
   const { data } = useLoaderData();
   
   if (data.totalElements < 1) {
-    return <SectionTitle text="No transactions available" />;
+    return (
+      <div className="flex flex-col items-center justify-center h-64 text-center px-4">
+        <h2 className="text-4xl font-semibold ">
+          No Transactions Found
+        </h2>
+        <p className="mt-2 text-lg ">You have not added any transactions.</p>
+      </div>
+    );
   }
+  
 
   return (
     <>
-      {/* <SectionTitle text="Your transactions" /> */}
       <h1 className="text-2xl font-semibold flex justify-center">Your Transactions</h1>
       <TransactionsList />
       <Pagination />
