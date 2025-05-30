@@ -67,7 +67,7 @@ const EditTransaction = () => {
   return (
     <Form method="post" className="form">
       <h4 className="text-3xl flex justify-center mb-8 capitalize ">
-        edit job
+        edit transaction
       </h4>
       <div className="bg-base-200 rounded-md px-8 py-4 grid gap-x-10 gap-y-8 sm:grid-cols-2 items-center">
         {/* CATEGORY */}

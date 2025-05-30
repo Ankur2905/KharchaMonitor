@@ -46,7 +46,7 @@ public class EmailScheduler {
 
         List<Transaction> transactions = transactionService.getTransactionsForPastMonth(user);
 
-        double totalSpending = transactionSummary.calculateTotalSpending(transactions);
+        double totalSpending = transactionSummary.calculateTotalMonthlySpending(transactions);
         Map<TransactionCategory, Double> categorySummary = transactionSummary.calculateCategoryWiseBreakdown(transactions);
 
         String content = emailContent.generateMonthlySummaryContent(username, totalSpending, categorySummary);

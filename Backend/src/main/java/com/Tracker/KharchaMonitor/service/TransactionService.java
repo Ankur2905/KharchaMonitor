@@ -1,6 +1,7 @@
 package com.Tracker.KharchaMonitor.service;
 
 
+import com.Tracker.KharchaMonitor.dto.PaginatedTransactionDTO;
 import com.Tracker.KharchaMonitor.enums.TransactionType;
 import com.Tracker.KharchaMonitor.model.Transaction;
 import com.Tracker.KharchaMonitor.model.User;
@@ -12,6 +13,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -62,21 +64,30 @@ public class TransactionService {
     }
 
     // Retrieve all transaction for a user
-    public DTO<List<Transaction>> getAllTransaction(String username, int page, int size) {
+    public DTO<PaginatedTransactionDTO> getAllTransaction(String username, int page, int size) {
         User user = userRepository.findByUsername(username);
 
         if (user == null) {
             return new DTO<>("User not found",false,null);
         }
 
-        PageRequest pageRequest = PageRequest.of(page, size);
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "date"));
+
 
         Page<Transaction> transactionsPage = transactionRepository.findByUserId(user.getId(), pageRequest);
 
         if(transactionsPage.isEmpty()) {
             return new DTO<>("No transaction found",false,null);
         }
-        return new DTO<>("Transaction found",true,transactionsPage.getContent());
+
+        PaginatedTransactionDTO paginatedData = new PaginatedTransactionDTO(
+                transactionsPage.getContent(),
+                transactionsPage.getTotalElements(),
+                transactionsPage.getTotalPages(),
+                transactionsPage.getNumber()
+        );
+
+        return new DTO<>("Transaction found",true,paginatedData);
     }
 
     // Update a transaction

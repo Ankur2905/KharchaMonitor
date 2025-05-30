@@ -8,8 +8,8 @@ import { toast } from "react-toastify";
 day.extend(advanceFormat);
 
 const TransactionsList = () => {
-    const {transactions: initailTransactions} = useLoaderData();
-    const [transactions, setTransactions] = useState(initailTransactions)
+    const {data} = useLoaderData();
+    const [transactions, setTransactions] = useState(data.transactions)
 
     const handleDelete = async (id) => {
       const confirmed = window.confirm(
@@ -36,7 +36,7 @@ const TransactionsList = () => {
     <div className="mt-10 px-4 sm:px-8">
       <h4 className="mb-6 font-semibold capitalize text-base-content">
         Total Transactions:{" "}
-        <span className="text-primary">{transactions.length}</span>
+        <span className="text-primary">{data.totalElements}</span>
       </h4>
 
       <div className="overflow-x-auto rounded-xl shadow-md border border-base-200 bg-base-100">

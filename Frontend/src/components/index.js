@@ -9,3 +9,4 @@ export { default as TransactionInput } from "./TransactionInput";
 export { default as TransactionsList } from "./TransactionsList";
 export { default as SectionTitle } from "./SectionTitle";
 export { default as DashboardStats } from "./DashboardStats";
+export { default as Pagination } from "./Pagination";

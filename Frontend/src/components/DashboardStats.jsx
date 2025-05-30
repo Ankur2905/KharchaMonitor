@@ -27,14 +27,14 @@ const DashboardStats = ({ budget, income, expenses }) => {
         />
         <StatCard
           icon={FaWallet}
-          title="Total Income"
+          title="Total Monthly Income"
           amount={income}
           bgColor="bg-gradient-to-br from-green-100 to-green-300"
           textColor="text-green-900"
         />
         <StatCard
           icon={FaMoneyBillWave}
-          title="Total Expenses"
+          title="Total Monthly Expenses"
           amount={expenses}
           bgColor="bg-gradient-to-br from-red-100 to-red-300"
           textColor="text-red-900"

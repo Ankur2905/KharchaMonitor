@@ -1,7 +1,9 @@
-import { Outlet } from "react-router-dom"
-import { Header, Navbar } from "../components"
+import { Outlet, useNavigation } from "react-router-dom";
+import { Header, Navbar, Loading } from "../components";
 
 const DashboardLayout = () => {
+  const navigation = useNavigation();
+  const isPageLoading = navigation.state === "loading";
   return (
     <section>
       <>
@@ -9,11 +11,15 @@ const DashboardLayout = () => {
           <Header />
           <Navbar />
         </div>
-        <div className="w-[90vw] mx-auto py-8">
-          <Outlet />
-        </div>
+        {isPageLoading ? (
+          <Loading />
+        ) : (
+          <div className="w-[90vw] mx-auto py-8">
+            <Outlet />
+          </div>
+        )}
       </>
     </section>
   );
-}
-export default DashboardLayout
+};
+export default DashboardLayout;

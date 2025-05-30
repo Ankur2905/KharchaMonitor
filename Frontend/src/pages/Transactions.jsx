@@ -1,6 +1,6 @@
 import { redirect, useLoaderData } from "react-router-dom";
 import { toast } from "react-toastify";
-import { SectionTitle, TransactionsList } from "../components";
+import { Pagination, SectionTitle, TransactionsList } from "../components";
 import { customFetch } from "../utils";
 
 export const loader =
@@ -13,12 +13,18 @@ export const loader =
       return redirect("/login");
     }
 
+    const url = new URL(request.url);
+    const page = url.searchParams.get("page") || 0;
+    const size = url.searchParams.get("size") || 6;
 
     try {
       const response = await customFetch.get(
-        `/transactions/user/${user.username}`
+        `/transactions/user/${user.username}?page=${page}&size=${size}`
       );
-      return { transactions: response.data.data };
+      console.log(response);
+      
+      
+      return { data: response.data.data};
     } catch (error) {
       console.log(error);
       const errorMessage =
@@ -31,15 +37,18 @@ export const loader =
   };
 
 const Transactions = () => {
-  const { transactions } = useLoaderData();
-  if (transactions.length < 1) {
+  const { data } = useLoaderData();
+  
+  if (data.totalElements < 1) {
     return <SectionTitle text="No transactions available" />;
   }
 
   return (
     <>
-      <SectionTitle text="Your transactions" />
+      {/* <SectionTitle text="Your transactions" /> */}
+      <h1 className="text-2xl font-semibold flex justify-center">Your Transactions</h1>
       <TransactionsList />
+      <Pagination />
     </>
   );
 };

@@ -1,5 +1,6 @@
 package com.Tracker.KharchaMonitor.controller;
 
+import com.Tracker.KharchaMonitor.dto.PaginatedTransactionDTO;
 import com.Tracker.KharchaMonitor.model.Transaction;
 import com.Tracker.KharchaMonitor.model.User;
 import com.Tracker.KharchaMonitor.service.TransactionService;
@@ -39,8 +40,8 @@ public class TransactionController {
 
 
     @GetMapping("/user/{username}")
-    public ResponseEntity<DTO<List<Transaction>>> getAllTransactions(@PathVariable String username, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        DTO<List<Transaction>> result = transactionService.getAllTransaction(username, page, size);
+    public ResponseEntity<DTO<PaginatedTransactionDTO>> getAllTransactions(@PathVariable String username, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        DTO<PaginatedTransactionDTO> result = transactionService.getAllTransaction(username, page, size);
         if (!result.success) {
            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }
