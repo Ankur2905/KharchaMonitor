@@ -52,9 +52,10 @@ public class EmailScheduler {
         int month = lastMonth.getMonthValue();
 
         double totalSpending = transactionSummary.calculateTotalMonthlySpending(transactions, year, month);
+        double totalEarnings = transactionSummary.calculateTotalMonthlyIncome(transactions, year, month);
         Map<TransactionCategory, Double> categorySummary = transactionSummary.calculateCategoryWiseBreakdown(transactions, year, month);
 
-        String content = emailContent.generateMonthlySummaryContent(username, totalSpending, categorySummary);
+        String content = emailContent.generateMonthlySummaryContent(username, totalSpending, totalEarnings, categorySummary);
         emailContent.sendEmailToUser(email, "Monthly Spending Summary for "+username, content);
     }
 
