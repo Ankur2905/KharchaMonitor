@@ -27,13 +27,13 @@ export const loader = (store) => async () => {
 const Dashboard = () => {
   const { data } = useLoaderData();
   const budget = data[0];
-  const income = data[1];
+  const earnings = data[1];
   const expenses = data[2];
 
   return (
     <>
       <h1 className="text-2xl font-semibold flex justify-center">Dashboard</h1>
-      <DashboardStats budget={budget} income={income} expenses={expenses} />
+      <DashboardStats budget={budget} earnings={earnings} expenses={expenses} />
     </>
   );
 };

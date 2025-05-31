@@ -14,7 +14,7 @@ const StatCard = ({ icon: Icon, title, amount, bgColor, textColor }) => (
   </div>
 );
 
-const DashboardStats = ({ budget, income, expenses }) => {
+const DashboardStats = ({ budget, earnings, expenses }) => {
   return (
     <div className=" py-10 px-6">
       <div className="max-w-7xl mx-auto h-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -27,8 +27,8 @@ const DashboardStats = ({ budget, income, expenses }) => {
         />
         <StatCard
           icon={FaWallet}
-          title="Total Monthly Income"
-          amount={income}
+          title="Total Monthly Earnings"
+          amount={earnings}
           bgColor="bg-gradient-to-br from-green-100 to-green-300"
           textColor="text-green-900"
         />
