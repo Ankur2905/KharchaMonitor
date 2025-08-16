@@ -34,12 +34,12 @@ public class AuthService {
 
     //Check if username Exists
     public boolean usernameExists(String username) {
-        return userRepository.findByUsername(username) != null;
+        return userRepository.findByUsernameAndVerified(username, true) != null;
     }
 
     //Check if Email Exists
     public boolean emailExists(String email) {
-        return userRepository.findByEmail(email) != null;
+        return userRepository.findByEmailAndVerified(email, true) != null;
     }
 
     // find user by username
@@ -62,9 +62,23 @@ public class AuthService {
             return new DTO<>("Email already exists.", false);
         }
 
+        User existingUser = userRepository.findByEmail(user.getEmail());
+        if (existingUser != null && !existingUser.isVerified()) {
+            String otp = otpUtils.generateOtp();
+            String hashedOtp = passwordEncoder.encode(otp);
+
+            existingUser.setOtp(hashedOtp);
+
+            userRepository.save(existingUser);
+            otpUtils.sendOtp(existingUser.getEmail(), otp);
+
+            return new DTO<>("Account already exists but is not verified. A new OTP has been sent to your email", true);
+        }
+
 
         String otp = otpUtils.generateOtp();
-        user.setOtp(otp);
+        String hashedOtp = passwordEncoder.encode(otp);
+        user.setOtp(hashedOtp);
         user.setVerified(false);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
@@ -88,8 +102,9 @@ public class AuthService {
             return new DTO<>("Email not found",false);
         }
 
-        if(!otp.equals(user.getOtp())) {
-            return new DTO<>("Invalid OTP",false);
+
+        if (!passwordEncoder.matches(otp, user.getOtp())) {
+            return new DTO<>("Invalid OTP", false);
         }
 
         user.setVerified(true);

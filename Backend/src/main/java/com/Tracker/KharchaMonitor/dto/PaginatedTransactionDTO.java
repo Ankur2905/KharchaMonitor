@@ -1,9 +1,12 @@
 package com.Tracker.KharchaMonitor.dto;
 
 import com.Tracker.KharchaMonitor.model.Transaction;
+import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
+@Data
 public class PaginatedTransactionDTO {
     private List<Transaction> transactions;
     private long totalElements;
@@ -15,18 +18,6 @@ public class PaginatedTransactionDTO {
         this.totalElements = totalElements;
         this.totalPage = totalPage;
         this.activePage = activePage;
-    }
-
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public long getTotalElements() {
-        return totalElements;
-    }
-
-    public int getTotalPage() {
-        return totalPage;
     }
 
     public int getActivePage() {
