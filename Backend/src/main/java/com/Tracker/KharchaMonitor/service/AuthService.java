@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 
 @Service
 public class AuthService {
@@ -68,6 +70,7 @@ public class AuthService {
             String hashedOtp = passwordEncoder.encode(otp);
 
             existingUser.setOtp(hashedOtp);
+            existingUser.setOtpExpiryTime(LocalDateTime.now().plusMinutes(2));
 
             userRepository.save(existingUser);
             otpUtils.sendOtp(existingUser.getEmail(), otp);
@@ -78,7 +81,9 @@ public class AuthService {
 
         String otp = otpUtils.generateOtp();
         String hashedOtp = passwordEncoder.encode(otp);
+
         user.setOtp(hashedOtp);
+        user.setOtpExpiryTime(LocalDateTime.now().plusMinutes(2));
         user.setVerified(false);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
@@ -102,6 +107,9 @@ public class AuthService {
             return new DTO<>("Email not found",false);
         }
 
+        if (user.getOtpExpiryTime() == null || LocalDateTime.now().isAfter(user.getOtpExpiryTime())) {
+            return new DTO<>("OTP expired, Please request a new one.", false);
+        }
 
         if (!passwordEncoder.matches(otp, user.getOtp())) {
             return new DTO<>("Invalid OTP", false);
@@ -109,6 +117,7 @@ public class AuthService {
 
         user.setVerified(true);
         user.setOtp(null);
+        user.setOtpExpiryTime(null);
         userRepository.save(user);
         return new DTO<>("User verified successfully.",true);
     }
