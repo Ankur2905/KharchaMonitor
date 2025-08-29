@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -59,14 +61,15 @@ public class AuthController {
         return ResponseEntity.ok(result);
     }
 
-
     // Login with username and Password
     @PostMapping("/login")
-    public ResponseEntity<DTO<User>> login(@RequestBody User user) {
-        DTO<User> result = authService.login(user);
-        if(!result.success) {
+    public ResponseEntity<DTO<Map<String, Object>>> login(@RequestBody User user) {
+        DTO<Map<String, Object>> result = authService.login(user);
+
+        if (!result.success) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
         }
+
         return ResponseEntity.ok(result);
     }
 }

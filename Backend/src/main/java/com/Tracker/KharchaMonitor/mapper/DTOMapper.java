@@ -11,7 +11,7 @@ public class DTOMapper {
 
     public BudgetDTO mapToBudgetDTO(Budget budget) {
         BudgetDTO budgetDTO = new BudgetDTO();
-        budgetDTO.setId(budget.getId());
+        budgetDTO.setId(budget.getId().toHexString());
         budgetDTO.setAmount(budget.getAmount());
         budgetDTO.setStartDate(budget.getStartDate());
         budgetDTO.setEndDate(budget.getEndDate());

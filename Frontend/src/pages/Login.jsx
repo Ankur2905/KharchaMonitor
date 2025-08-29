@@ -15,7 +15,9 @@ export const action =
         headers: { "Content-Type": "application/json" },
       });
 
-      store.dispatch(loginUser(response.data));
+      const {token, user} = response.data.data;
+
+      store.dispatch(loginUser({user, token}));
       toast.success("Logged in successfully");
       return redirect("/dashboard");
     } catch (error) {

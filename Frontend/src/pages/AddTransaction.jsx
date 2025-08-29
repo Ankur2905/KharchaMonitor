@@ -2,8 +2,9 @@ import { Form, redirect, useLoaderData } from "react-router-dom";
 import { toast } from "react-toastify";
 import { TransactionInput } from "../components";
 import { customFetch } from "../utils";
+import { fetchBudget } from "../features/budget/budgetSlice";
 
-export const loader = (store) => () => {
+export const loader = (store) => async () => {
   const user = store.getState().userState.user;
 
   if (!user) {
@@ -11,9 +12,14 @@ export const loader = (store) => () => {
     return redirect("/login");
   }
 
-  const { budget } = user;
+  const result = await store.dispatch(fetchBudget(user.id));
+
+  if (!result.payload || !result.payload.id) {
+    toast.warn("No budget found, please create one first");
+    return redirect("/dashboard");
+  }
   
-  return { userId: budget.userId };
+  return {userId: user.id}
 };
 
 export const action =

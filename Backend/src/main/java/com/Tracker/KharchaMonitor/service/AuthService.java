@@ -6,12 +6,15 @@ import com.Tracker.KharchaMonitor.repository.BudgetRepository;
 import com.Tracker.KharchaMonitor.repository.UserRepository;
 import com.Tracker.KharchaMonitor.dto.DTO;
 import com.Tracker.KharchaMonitor.utils.EmailValidator;
+import com.Tracker.KharchaMonitor.utils.JwtUtils;
 import com.Tracker.KharchaMonitor.utils.OtpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Service
@@ -32,6 +35,9 @@ public class AuthService {
 
     @Autowired
     private BudgetRepository budgetRepository;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
 
     //Check if username Exists
@@ -70,7 +76,7 @@ public class AuthService {
             String hashedOtp = passwordEncoder.encode(otp);
 
             existingUser.setOtp(hashedOtp);
-            existingUser.setOtpExpiryTime(LocalDateTime.now().plusMinutes(2));
+            existingUser.setOtpExpiryTime(LocalDateTime.now().plusMinutes(5));
 
             userRepository.save(existingUser);
             otpUtils.sendOtp(existingUser.getEmail(), otp);
@@ -150,16 +156,34 @@ public class AuthService {
     }
 
     // Login user with email and password
-    public DTO<User> login(User user) {
+    public DTO<Map<String, Object>> login(User user) {
         User foundUser = findByUsername(user.getUsername());
 
         if (foundUser == null || !passwordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
             return new DTO<>("Invalid username or password!", false, null);
         }
-        if(!foundUser.isVerified()) {
-            return new DTO<>("Account is not verified. Please verify via OTP.",false, null);
+        if (!foundUser.isVerified()) {
+            return new DTO<>("Account is not verified. Please verify via OTP.", false, null);
         }
-        return new DTO<>("Login successful",true, foundUser);
+
+        String token = jwtUtils.generateToken(
+                org.springframework.security.core.userdetails.User
+                        .withUsername(foundUser.getUsername())
+                        .password(foundUser.getPassword())
+                        .authorities("USER")
+                        .build()
+        );
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+
+        Map<String, Object> safeUser = new HashMap<>();
+        safeUser.put("id", foundUser.getId().toString());
+        safeUser.put("username", foundUser.getUsername());
+        safeUser.put("email", foundUser.getEmail());
+        response.put("user", safeUser);
+
+        return new DTO<>("Login successful", true, response);
     }
 
 }

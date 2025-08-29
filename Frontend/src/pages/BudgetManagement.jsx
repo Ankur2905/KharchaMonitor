@@ -2,18 +2,26 @@ import { Form, redirect, useLoaderData } from "react-router-dom";
 import { toast } from "react-toastify";
 import { BudgetInput } from "../components";
 import { customFetch } from "../utils";
+import { fetchBudget } from "../features/budget/budgetSlice";
 
-export const loader = (store) => () => {
+export const loader = (store) => async () => {
   const user = store.getState().userState.user;
 
   if (!user) {
     toast.warn("Please login first");
     return redirect("/login");
   }
+  
+  const result = await store.dispatch(fetchBudget(user.id));  
 
-  const { budget } = user;
+  if (!result.payload || !result.payload.id) {
+    toast.warn("No budget found, please create one first");
+    return redirect("/dashboard");
+  }
 
-  return { budgetId: budget.id };
+  
+
+  return { budgetId: result.payload.id };
 };
 
 export const action =
@@ -22,6 +30,7 @@ export const action =
     const formData = await request.formData();
     const budgetId = formData.get("id");
     const data = Object.fromEntries(formData);
+    //console.log(request);
     delete data.id;
 
     try {
@@ -41,9 +50,10 @@ export const action =
 
 const BudgetManagement = () => {
   const { budgetId } = useLoaderData();
+  
   return (
     <Form method="post">
-      <input type="hidden" name="id" value={budgetId} />
+      <input type="hidden" name="id" value={budgetId || ""} />
       <div className="flex flex-col items-center flex-grow">
         <h1 className="text-2xl font-semibold">Update Budget</h1>
         <div className="w-full max-w-xl mx-4 mt-6 bg-base-200 p-6 rounded-lg shadow-lg">

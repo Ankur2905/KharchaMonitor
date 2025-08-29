@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Setter
 public class BudgetDTO {
 
-    private ObjectId id;
+    private String id;
     private Double amount;
     private LocalDate startDate;
     private LocalDate endDate;
